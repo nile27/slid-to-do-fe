@@ -20,7 +20,6 @@ import useToast from '@/hooks/use-toast'
 import {get} from '@/lib/common-api'
 import {goalDataApi, goalDeleteApi, goalUpdateApi} from '@/lib/goals/api'
 import {todoDeleteApi, todoUpdateApi} from '@/lib/todos/api'
-
 import {useModalStore} from '@/store/use-modal-store'
 
 import type {Goal} from '@/types/goals'
