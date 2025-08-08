@@ -8,15 +8,13 @@ import InputForm from '@/components/common/input-form'
 
 import {useCustomMutation} from '@/hooks/use-custom-mutation'
 import useToast from '@/hooks/use-toast'
-
-import {loginApi} from '../api/login-api'
-
+import {loginApi} from '@/lib/auth/login-api'
 
 import type {ApiError} from '@/types/api'
 import type {LoginFormData} from '@/types/login'
 
 const LoginPage = () => {
-0
+    0
 
     const {
         register,
@@ -37,13 +35,11 @@ const LoginPage = () => {
                 return [{name: 'email', message: error.message}]
             }
             if (error.status === 400) {
-                showToast('로그인에 실패했습니다!', {type: 'error'})
                 return [{name: 'password', message: error.message}]
             }
             if (error.status === 401) {
                 showToast(error.message, {type: 'error'})
                 return [{name: 'password', message: error.message}]
-
             }
             return []
         },
