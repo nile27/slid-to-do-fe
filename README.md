@@ -18,6 +18,7 @@
 - 할 일 진행률 시각화
 - 반응형 UI + 애니메이션 구현
 
+
 ## 🤝🏻 Team Slid to-do
 
 | <img width="268" alt="Image" src="https://github.com/user-attachments/assets/e73b4f54-fd73-46ba-ac71-22bee63dfae1" /> | <img width="268" alt="Image" src="https://github.com/user-attachments/assets/293f6f22-4d36-420a-979a-be79dc86d6d6" /> | <img width="268" alt="Image" src="https://github.com/user-attachments/assets/53b9b249-a2cc-49bc-9979-a39492874504" /> | <img width="268" alt="Image" src="https://github.com/user-attachments/assets/fb2046a9-e8a9-420a-a011-181ff6f33fcd" /> | <img width="268" alt="Image" src="https://github.com/user-attachments/assets/b8da23a4-6a04-492d-9efd-53a524f945d7" /> |
@@ -169,7 +170,7 @@
   </tr>
 </table>
 
-
+<br/>
 
 ## 🗒️ 팀 회고
 
