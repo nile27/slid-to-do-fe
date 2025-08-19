@@ -32,7 +32,6 @@ const GoalsPage = () => {
     const [moreButton, setMoreButton] = useState<boolean>(false)
     const [goalEdit, setGoalEdit] = useState<boolean>(false)
     const [goalTitle, setGoalTitle] = useState<string>('')
-
     const {showToast} = useToast()
 
     const queryClient = useQueryClient()
@@ -48,7 +47,7 @@ const GoalsPage = () => {
         ['goal', goalId],
         async () => goalDataApi(goalId),
         {
-            errorDisplayType: 'toast',
+            errorDisplayType: 'both',
             mapErrorMessage: (error) => {
                 const typedError = error as {message?: string; response?: {data?: {message?: string}}}
 
@@ -58,7 +57,7 @@ const GoalsPage = () => {
 
                 return typedError.message || '알 수 없는 오류가 발생했습니다.'
             },
-            // errorRedirectPath: '/',
+            errorRedirectPath: '/',
         },
     )
 
@@ -84,7 +83,7 @@ const GoalsPage = () => {
                 return typedError.message || '알 수 없는 오류가 발생했습니다.'
             },
             onSuccess: () => {
-                queryClient.invalidateQueries({queryKey: ['goals']})
+                queryClient.invalidateQueries({queryKey: ['goal']})
                 showToast('수정이 완료되었습니다.')
             },
         },
@@ -216,6 +215,7 @@ const GoalsPage = () => {
             },
             onSuccess: () => {
                 queryClient.invalidateQueries({queryKey: ['todos']})
+                queryClient.invalidateQueries({queryKey: ['goal']})
             },
         },
     )
@@ -236,6 +236,7 @@ const GoalsPage = () => {
             },
             onSuccess: () => {
                 queryClient.invalidateQueries({queryKey: ['todos']})
+                queryClient.invalidateQueries({queryKey: ['goal']})
             },
         },
     )
@@ -262,7 +263,7 @@ const GoalsPage = () => {
     }
 
     return (
-        <div className="w-full desktop-layout flex-1 min-w-0">
+        <div className="w-full desktop-layout flex-1 min-w-0 overflow-y-auto">
             <div className="text-subTitle">목표</div>
             <GoalHeader
                 goal={goal}
