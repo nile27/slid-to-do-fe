@@ -131,7 +131,7 @@ export default function GoalHeader({
                     </div>
                 )}
             </div>
-            <div className="mt-6 text-subBody font-semibold">Progress</div>
+
             <div className="mt-3.5">
                 <ProgressBar progress={progress || 0} />
             </div>
