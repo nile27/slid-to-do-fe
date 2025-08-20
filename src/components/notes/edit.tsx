@@ -101,12 +101,11 @@ const NoteEditCompo = ({noteId}: {noteId: string}) => {
             },
             onSuccess: (successData) => {
                 showToast('수정이 완료되었습니다!')
-                router.push(`/notes?goalId=${successData.goal.id}`)
+                router.push(`/notes`)
                 queryClient.invalidateQueries({queryKey: ['noteDetail', noteId]})
             },
         },
     )
-
 
     /** 수정하기 버튼 클릭 이벤트 */
     const handleEdit = () => {

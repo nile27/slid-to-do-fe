@@ -175,7 +175,7 @@ const NoteWriteCompo = ({
             },
             onSuccess: () => {
                 showToast('작성이 완료되었습니다.')
-                router.push(`/notes?goalId=${goalId}`)
+                router.push(`/notes`)
             },
         },
     )

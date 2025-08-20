@@ -3,6 +3,8 @@
 import Image from 'next/image'
 import {useSearchParams} from 'next/navigation'
 
+import clsx from 'clsx'
+
 import LoadingSpinner from '@/components/common/loading-spinner'
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
@@ -25,9 +27,8 @@ const Page = () => {
         ref,
         hasMore,
     } = useInfiniteScrollQuery({
-        queryKey: ['notes'],
+        queryKey: ['notes', goalId],
         fetchFn: (cursor) => noteListApi(goalId ?? undefined, cursor),
-        enabled: goalId !== null,
     } as InfiniteScrollOptions<NoteCommon>)
 
     const fetchGetGoalTitle = async (): Promise<{title: string}> => {
@@ -57,20 +58,26 @@ const Page = () => {
         <div className="bg-slate-100 flex flex-col w-full min-h-screen h-full overflow-y-auto">
             <div className="desktop-layout min-h-screen flex flex-col">
                 <header>
-                    <h1 className="text-subTitle text-custom_slate-900 ">노트 모아보기</h1>
+                    <h1 className="text-subTitle text-custom_slate-900 ">
+                        {' '}
+                        {!goalId && <span>모든 </span>}노트 모아보기
+                    </h1>
                 </header>
 
-                <div className="w-full mt-4 flex-1 flex flex-col">
-                    <div className="flex gap-2 items-center bg-white rounded-xl border border-custom_slate-100 py-3.5 px-6">
-                        <Image src="/goals/flag-goal.svg" alt="goal-flag" width={28} height={28} />
-                        <h2 className="text-subTitle-sm truncate">
-                            {' '}
-                            {notes.length > 0 ? notes?.[0]?.goal.title : goalData?.title}
-                        </h2>
-                    </div>
+                <div className={clsx('w-full  flex-1 flex flex-col', goalId ? 'mt-4' : 'mt-0')}>
+                    {goalId && (
+                        <div className="flex gap-2 items-center bg-white rounded-xl border border-custom_slate-100 py-3.5 px-6">
+                            <Image src="/goals/flag-goal.svg" alt="goal-flag" width={28} height={28} />
+                            <h2 className="text-subTitle-sm truncate">
+                                {notes.length > 0 ? notes?.[0]?.goal.title : goalData?.title}
+                            </h2>
+                        </div>
+                    )}
 
                     {notes.length > 0 ? (
                         <>
+                            {hasMore && !isLoading && notes.length > 0 && <div ref={ref} />}
+
                             <NoteList notesData={notes} />
                             {!hasMore && notes.length > 0 && (
                                 <div className="mt-4 text-gray-400 text-sm flex items-center justify-center">

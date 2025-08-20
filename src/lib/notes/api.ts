@@ -22,8 +22,8 @@ export const noteListApi = async (goalId?: string, cursor?: number) => {
     urlParameter.set('size', '10')
     if (goalId) urlParameter.set('goalId', goalId)
     if (cursor !== undefined) urlParameter.set('cursor', String(cursor))
-
     const endpoint = `notes?${urlParameter.toString()}`
+
     const result = await get<NoteListResponse>({
         endpoint,
     })

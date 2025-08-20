@@ -96,6 +96,16 @@ const ClientSidebar = ({isOpen, onClickHandler}: ClientInterface) => {
                         </ButtonStyle>
                     )}
                 </nav>
+                <hr className=" -mx-5 border-t-2 border-gray-200" />
+                <nav
+                    aria-label="주요"
+                    className=" w-full h-13 min-h-13 overflow-y-auto flex flex-col max-sm:flex-row max-sm:justify-between max-sm:items-center justify-center items-start "
+                >
+                    <Link
+                        href={'/notes'}
+                        className=" py-2 p-2 w-full h-auto  text-subTitle-base text-custom_slate-700 flex items-center gap-3 hover:opacity-80"
+                    >모든 노트 모아보기</Link>
+                </nav>
                 <hr className=" -mx-5  border-t-2 border-gray-200" />
                 {/* 목표 섹션 */}
                 <SidebarList isMobile={isMobile} />
