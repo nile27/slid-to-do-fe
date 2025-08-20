@@ -1,6 +1,6 @@
 'use client'
 
-import {useCallback, useState} from 'react'
+import {useState} from 'react'
 
 import {useQueryClient} from '@tanstack/react-query'
 import axios from 'axios'
@@ -9,16 +9,15 @@ import LoadingSpinner from '@/components/common/loading-spinner'
 import AddTodoModal from '@/components/common/modal/add-todo-modal'
 import EditTodoModal from '@/components/common/modal/edit-todo-modal'
 import {useCustomMutation} from '@/hooks/use-custom-mutation'
-import {useCustomQuery} from '@/hooks/use-custom-query'
+import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
 import {useModal} from '@/hooks/use-modal'
 import {del, get, patch} from '@/lib/common-api'
 
 import Filter from './components/filter'
 import TodoItem from '../../components/common/todo-item'
 
+import type {InfiniteScrollOptions} from '@/types/infinite-scroll'
 import type {TodoListDetailResponse, TodoResponse} from '@/types/todos'
-import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
-import {InfiniteScrollOptions} from '@/types/infinite-scroll'
 
 type FilterValue = 'ALL' | 'TODO' | 'DONE'
 
@@ -29,27 +28,32 @@ const Page = () => {
     const [pageInfo, setPageInfo] = useState<{totalCount?: number; nextCursor?: number}>({})
 
     const getTodosList = async (cursor?: number) => {
-        const urlParameter = new URLSearchParams()
+        try {
+            const urlParameter = new URLSearchParams()
 
-        // if (selectedFilter === 'TODO') parameter.append('done', 'false')
-        // else if (selectedFilter === 'DONE') parameter.append('done', 'true')
-        if (cursor !== undefined) urlParameter.set('cursor', String(cursor))
-        if (selectedFilter === 'TODO') urlParameter.set('done', 'false')
-        else if (selectedFilter === 'DONE') urlParameter.set('done', 'true')
+            if (cursor !== undefined) urlParameter.set('cursor', String(cursor))
+            if (selectedFilter === 'TODO') urlParameter.set('done', 'false')
+            else if (selectedFilter === 'DONE') urlParameter.set('done', 'true')
 
-        const qs = urlParameter.toString()
-        const endpoint = qs ? `todos?${qs}` : 'todos'
-        const result = await get<TodoListDetailResponse>({endpoint})
+            const qs = urlParameter.toString()
+            const endpoint = qs ? `todos?${qs}` : 'todos'
+            const result = await get<TodoListDetailResponse>({endpoint})
 
-        setPageInfo({
-            totalCount: result.data.totalCount ?? undefined,
-            nextCursor: result.data.nextCursor ?? undefined,
-        })
+            setPageInfo({
+                totalCount: result.data.totalCount ?? undefined,
+                nextCursor: result.data.nextCursor ?? undefined,
+            })
 
-        return {
-            data: result.data.todos,
-            nextCursor: result.data.nextCursor ?? undefined,
-            totalCount: result.data.totalCount ?? undefined,
+            return {
+                data: result.data.todos,
+                nextCursor: result.data.nextCursor ?? undefined,
+                totalCount: result.data.totalCount ?? undefined,
+            }
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                throw error
+            }
+            throw new Error(String(error))
         }
     }
 
@@ -62,16 +66,6 @@ const Page = () => {
         queryKey: ['todos', selectedFilter],
         fetchFn: (cursor) => getTodosList(cursor),
     } as InfiniteScrollOptions<TodoResponse>)
-    // {
-    //     errorDisplayType: 'toast',
-    //     mapErrorMessage: (error) => {
-    //         const typedError = error as {message?: string; response?: {data?: {message?: string}}}
-    //         if (axios.isAxiosError(error)) {
-    //             return error.response?.data.message || '서버 오류가 발생했습니다.'
-    //         }
-    //         return typedError.message || '할 일을 불러오는 중 오류가 발생했습니다.'
-    //     },
-    // },
 
     const {mutate: updateTodo} = useCustomMutation(
         async ({todoId, newDone}: {todoId: number; newDone: boolean}) => {

@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import {useRouter} from 'next/navigation'
 import React, {useEffect, useRef, useState} from 'react'
 
@@ -13,7 +14,6 @@ import useToast from '@/hooks/use-toast'
 import {noteDeleteApi} from '@/lib/notes/api'
 
 import TwoButtonModal from '../common/modal/two-buttom-modal'
-import Image from 'next/image'
 
 const NotesSelect: React.FC<{noteId: number}> = ({noteId}) => {
     const {showToast} = useToast()
