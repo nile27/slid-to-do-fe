@@ -104,7 +104,10 @@ const ClientSidebar = ({isOpen, onClickHandler}: ClientInterface) => {
                     <Link
                         href={'/notes'}
                         className=" py-2 p-2 w-full h-auto  text-subTitle-base text-custom_slate-700 flex items-center gap-3 hover:opacity-80"
-                    >모든 노트 모아보기</Link>
+                    >
+                        <Image src={'/sidebar/note.svg'} width={15} height={15} alt="note" />
+                        모든 노트 모아보기
+                    </Link>
                 </nav>
                 <hr className=" -mx-5  border-t-2 border-gray-200" />
                 {/* 목표 섹션 */}
