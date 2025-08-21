@@ -99,14 +99,13 @@ const NoteEditCompo = ({noteId}: {noteId: string}) => {
                 if (apiError.message) return error.message
                 return '노트를 수정하는 데 실패했습니다.'
             },
-            onSuccess: (successData) => {
+            onSuccess: () => {
                 showToast('수정이 완료되었습니다!')
-                router.push(`/notes?goalId=${successData.goal.id}`)
+                router.push(`/notes`)
                 queryClient.invalidateQueries({queryKey: ['noteDetail', noteId]})
             },
         },
     )
-
 
     /** 수정하기 버튼 클릭 이벤트 */
     const handleEdit = () => {
