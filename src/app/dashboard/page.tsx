@@ -8,8 +8,10 @@ const DashBoardPage = () => {
         <section className=" w-full text-black text-body-base overflow-x-hidden overflow-y-auto   bg-slate-100">
             <div className=" w-full h-auto desktop-layout">
                 <h1 className="text-black text-title-base mb-4 ">대시보드</h1>
-                <Headers />
-                <GoalTodoContainer />
+                <div className=" flex w-full h-full justify-center gap-4">
+                    <GoalTodoContainer />
+                    <Headers />
+                </div>
             </div>
         </section>
     )

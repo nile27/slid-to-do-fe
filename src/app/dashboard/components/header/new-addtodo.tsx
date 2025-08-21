@@ -5,17 +5,23 @@ import Link from 'next/link'
 import React from 'react'
 
 import type {TodoResponse} from '@/types/todos'
+import type {NoteCommon} from '@/types/notes'
 
-const NewAddTodo = ({data}: {data: TodoResponse[] | undefined}) => {
+const NewAddTodo = ({data, subject}: {data: TodoResponse[] | NoteCommon[] | undefined; subject: 'note' | 'todo'}) => {
     return (
         <article className=" w-full  h-[200px] p-3 min-w-65 bg-white rounded-lg    ">
             <header className="flex justify-between items-center mb-4">
                 <div className="flex justify-center items-center gap-2">
                     <Image src={'/dashboard/todo-recently.svg'} alt="최근 등록한 할일" width={40} height={40} />
 
-                    <span className="text-title-base font-semibold">최근 등록한 할 일</span>
+                    <span className="text-title-base font-semibold">
+                        {subject === 'todo' ? '최근 등록한 할 일' : '최근 등록한 노트'}
+                    </span>
                 </div>
-                <Link href={'./todos'} className="text-subBody-sm font-medium flex items-center">
+                <Link
+                    href={subject === 'todo' ? './todos' : './notes'}
+                    className="text-subBody-sm font-medium flex items-center"
+                >
                     모두보기
                     <Image src="/goals/ic-arrow-right.svg" alt="노트보기 페이지 이동" width={24} height={24} />
                 </Link>
