@@ -111,7 +111,7 @@ export default function GoalHeader({
                                     name="title"
                                     className="max-w-full"
                                     onChange={handleInputUpdate}
-                                    maxLength={100}
+                                    maxLength={35}
                                     ref={inputReference}
                                 />
                                 <ButtonStyle
