@@ -1,11 +1,7 @@
 'use client'
 
-import Image from 'next/image'
-import {useRouter} from 'next/navigation'
-
 import LoadingSpinner from '@/components/common/loading-spinner'
 import Progress from '@/components/goals/prograss'
-import {dateformat} from '@/components/style/utils'
 import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
 import useToast from '@/hooks/use-toast'
 import {goalListPageApi} from '@/lib/goals/api'
@@ -13,7 +9,6 @@ import {goalListPageApi} from '@/lib/goals/api'
 import type {GoalResponse} from '@/types/goals'
 
 const GoalsListPage = () => {
-    const router = useRouter()
     const {showToast} = useToast()
 
     const {data, isLoading, ref, hasMore, isError, error} = useInfiniteScrollQuery({
@@ -41,22 +36,7 @@ const GoalsListPage = () => {
                             <div key={goal.id} className="mt-4 w-full h-full flex-1">
                                 <div className="mt-4 bg-white rounded-xl border border-custom_slate-100 p-6">
                                     <div className="bg-white rounded-xl">
-                                        <div
-                                            className="flex items-center gap-4 cursor-pointer mb-2"
-                                            onClick={() => router.push(`/goals/${goal.id}`)}
-                                        >
-                                            <Image src="/goals/flag-goal.svg" alt="goal-flag" width={40} height={40} />
-                                            <div className="text-subTitle font-medium w-full truncate flex gap-2 items-center justify-between">
-                                                <div>{goal.title}</div>
-                                                <div className="text-subBody text-custom_blue-900">
-                                                    {dateformat(goal.createdAt)}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <Progress goalId={goal.id} />
-
-                                        {/* <ProgressUnmotion goalId={goal.id} /> */}
+                                        <Progress goalId={goal.id} title={goal.title} createdAt={goal.createdAt} />
                                     </div>
                                 </div>
                             </div>

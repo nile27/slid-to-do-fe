@@ -1,15 +1,20 @@
 'use client'
 
+import {useRouter} from 'next/navigation'
+
 import axios from 'axios'
+import clsx from 'clsx'
 
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {goalPrograssApi} from '@/lib/goals/api'
 
 import LoadingSpinner from '../common/loading-spinner'
+import {dateformat} from '../style/utils'
 
 import type {GoalProgress} from '@/types/goals'
 
-export default function Progress({goalId}: {goalId: number}) {
+export default function Progress({goalId, title, createdAt}: {goalId: number; title: string; createdAt: string}) {
+    const router = useRouter()
     const {data, isLoading} = useCustomQuery<GoalProgress>(
         ['goal', goalId, 'progress'],
         async () => goalPrograssApi(Number(goalId)),
@@ -27,16 +32,47 @@ export default function Progress({goalId}: {goalId: number}) {
         },
     )
 
-    if (isLoading) return <LoadingSpinner />
-
     const progress = data?.progress ?? 0
 
+    if (isLoading) return <LoadingSpinner />
+
     return (
-        <div className="flex items-center gap-2 w-full">
-            <div className="flex-1 bg-custom_slate-50 h-1 rounded-lg overflow-hidden relative">
-                {progress > 0 && <div className="h-full bg-[#0e0e0e]" style={{width: `${progress}%`}} />}
+        <div className="">
+            <div className="flex items-center gap-4 cursor-pointer" onClick={() => router.push(`/goals/${goalId}`)}>
+                <div className="text-subTitle font-medium w-full truncate flex gap-2 items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        {progress <= 0 && (
+                            <div className="px-2 py-1 text-sm rounded-lg text-white bg-custom_slate">미완료</div>
+                        )}
+                        {progress > 0 && progress <= 99 && (
+                            <div className="px-2 py-1 text-sm rounded-lg text-white bg-orange-500">진행중</div>
+                        )}
+                        {progress >= 100 && (
+                            <div className="px-2 py-1 text-sm rounded-lg text-white bg-custom_blue-500">완료</div>
+                        )}
+
+                        {title}
+                    </div>
+                    <div className="text-subBody text-custom_blue-900">{dateformat(createdAt)}</div>
+                </div>
             </div>
-            <span className="text-subBody font-semibold">{progress}%</span>
+            <div className="mt-2 text-sm text-gray-500">할 일 100% 중 {progress}% 완료</div>
+            <div className="mt-2 flex items-center gap-2 w-full">
+                <div className="flex-1 bg-custom_slate-50 h-2 rounded-lg overflow-hidden relative">
+                    {progress > 0 && (
+                        <div
+                            className={clsx(
+                                'h-full',
+                                // 'bg-gray-500',
+                                `${progress > 0 && progress <= 99 && 'bg-orange-400'}`,
+                                `${progress >= 100 && 'bg-custom_blue-400'}`,
+                            )}
+                            style={{width: `${progress}%`}}
+                        />
+                    )}
+                </div>
+                {/* <span className="text-subBody font-semibold">{progress}%</span> */}
+            </div>
         </div>
     )
 }
