@@ -11,8 +11,6 @@ import NewAddTodo from './new-addtodo'
 import type {TodoResponse} from '@/types/todos'
 import type {NoteCommon} from '@/types/notes'
 
-const NoSsrProgress = dynamic(() => import('./progress'), {ssr: false})
-
 interface TodoPage {
     data: TodoResponse[]
     nextCursor?: number
@@ -21,23 +19,6 @@ interface TodoPage {
 interface NotePage {
     data: NoteCommon[]
     nextCursor?: number
-}
-
-const getProgressData = async () => {
-    try {
-        const response = await get<{progress: number}>({
-            endpoint: `todos/progress`,
-        })
-
-        return {
-            data: response.data.progress,
-        }
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            throw error
-        }
-        throw new Error(String(error))
-    }
 }
 
 const getGoalsData = async () => {
@@ -96,7 +77,6 @@ const Header = () => {
         <header className="w-full max-w-[470px] h-auto min-w-[200px]   flex-col mb-4  flex justify-start items-start gap-4">
             <NewAddTodo data={todoData?.data} subject="todo" />
             <NewAddTodo data={noteData?.data} subject="note" />
-            {/* <NoSsrProgress percent={typeof progress?.data === 'number' ? progress.data : 0} /> */}
         </header>
     )
 }

@@ -11,11 +11,13 @@ export interface GoalResponse extends Goal {
     userId: number
     createdAt: string
     updatedAt: string
+    totalCount?: number
 }
 
 /**단일 목표 달성률 응답 */
 export interface GoalProgress {
     progress: number
+    totalCount?: number
 }
 
 export interface GoalsListResponse {

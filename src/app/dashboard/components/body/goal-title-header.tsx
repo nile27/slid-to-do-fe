@@ -22,7 +22,7 @@ const GoalTitleHeader = ({goalId, title}: {goalId: number; title: string}) => {
     })
 
     return (
-        <header className="w-full h-auto p-2 ">
+        <div className="w-full h-auto p-4 border border-[#D4D5D5] rounded-lg  ">
             <div className="w-full h-auto p-2 flex justify-between items-center min-w-0">
                 <Link
                     href={`/goals/${goalId}`}
@@ -30,16 +30,9 @@ const GoalTitleHeader = ({goalId, title}: {goalId: number; title: string}) => {
                 >
                     {title}
                 </Link>
-
-                <button
-                    onClick={openModal}
-                    className="whitespace-nowrap shrink-0 text-blue-500 text-subBody-sm font-bold w-auto h-auto cursor-pointer"
-                >
-                    +할일 추가
-                </button>
             </div>
             <ProgressBar progress={progressData || 0} />
-        </header>
+        </div>
     )
 }
 
