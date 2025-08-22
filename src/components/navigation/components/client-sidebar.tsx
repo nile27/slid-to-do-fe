@@ -66,39 +66,15 @@ const ClientSidebar = ({isOpen, onClickHandler}: ClientInterface) => {
                 className={` flex-1 min-h-0    flex-col w-full h-full  ${isOpen === 'noState' ? 'flex tablet:hidden mobile:hidden' : isOpen ? 'flex animate-opacity-open ' : ' animate-opacity-close mobile:hidden'}`}
             >
                 <SidebarProfile />
-                {!isMobile && (
-                    <ButtonStyle size="full" onClick={openModal}>
-                        + 새 목표
-                    </ButtonStyle>
-                )}
+
+                <ButtonStyle size="full" onClick={openModal}>
+                    + 새 목표
+                </ButtonStyle>
+
                 <hr className=" mt-5 -mx-5 border-t-2 border-gray-200" />
                 {/* 주요 네비게이션 */}
-                <nav
-                    aria-label="주요"
-                    className=" w-full h-13 min-h-13 overflow-y-auto flex flex-col max-sm:flex-row max-sm:justify-between max-sm:items-center justify-center items-start "
-                >
-                    <Link
-                        href={'/dashboard'}
-                        className=" py-2 p-2 w-full h-auto  text-subTitle-base text-custom_slate-700 flex items-center gap-3 hover:opacity-80  "
-                    >
-                        <Image
-                            src={'/sidebar/home.svg'}
-                            width={15}
-                            height={15}
-                            alt="Subtract"
-                            className="w-[15px] h-[15px]"
-                        />
-                        대시보드
-                    </Link>
-                    {isMobile === true && (
-                        <ButtonStyle onClick={openModal} size="small">
-                            + 새 목표
-                        </ButtonStyle>
-                    )}
-                </nav>
-                <hr className=" -mx-5  border-t-2 border-gray-200" />
-                {/* 목표 섹션 */}
-                <SidebarList isMobile={isMobile} />
+
+                <SidebarList />
             </div>
         </>
     )
