@@ -65,8 +65,6 @@ const ClientSidebar = ({isOpen, onClickHandler}: ClientInterface) => {
             <div
                 className={` flex-1 min-h-0    flex-col w-full h-full  ${isOpen === 'noState' ? 'flex tablet:hidden mobile:hidden' : isOpen ? 'flex animate-opacity-open ' : ' animate-opacity-close mobile:hidden'}`}
             >
-                <SidebarProfile />
-
                 <ButtonStyle size="full" onClick={openModal}>
                     + 새 목표
                 </ButtonStyle>
@@ -75,6 +73,8 @@ const ClientSidebar = ({isOpen, onClickHandler}: ClientInterface) => {
                 {/* 주요 네비게이션 */}
 
                 <SidebarList />
+
+                <SidebarProfile />
             </div>
         </>
     )
