@@ -1,5 +1,6 @@
 'use client'
 
+import {HasmoreLoading} from '@/components/common/hasmore-loading'
 import LoadingSpinner from '@/components/common/loading-spinner'
 import Progress from '@/components/goals/prograss'
 import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
@@ -41,7 +42,7 @@ const GoalsListPage = () => {
                                 </div>
                             </div>
                         ))}
-                        {hasMore && <div ref={ref} style={{height: '1px'}} />}
+                        {hasMore && <HasmoreLoading ref={ref} />}
                         {!hasMore && data.length > 0 && (
                             <div className="py-4 text-gray-400 text-sm flex items-center justify-center">
                                 <p>모든 목표를 다 불러왔어요</p>

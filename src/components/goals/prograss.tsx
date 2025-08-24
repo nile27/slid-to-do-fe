@@ -63,7 +63,6 @@ export default function Progress({goalId, title, createdAt}: {goalId: number; ti
                         <div
                             className={clsx(
                                 'h-full',
-                                // 'bg-gray-500',
                                 `${progress > 0 && progress <= 99 && 'bg-orange-400'}`,
                                 `${progress >= 100 && 'bg-custom_blue-400'}`,
                             )}
@@ -71,7 +70,6 @@ export default function Progress({goalId, title, createdAt}: {goalId: number; ti
                         />
                     )}
                 </div>
-                {/* <span className="text-subBody font-semibold">{progress}%</span> */}
             </div>
         </div>
     )
