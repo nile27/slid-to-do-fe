@@ -20,7 +20,7 @@ export interface TodoResponse extends Todo {
 
 export interface TodoListDetailResponse {
     totalCount: number
-    nextCursor: number | null
+    nextCursor: number
     todos: TodoResponse[]
 }
 
