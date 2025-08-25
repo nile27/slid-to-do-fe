@@ -61,7 +61,7 @@ const GoalTodoContainer = ({isDashboard = true}: {isDashboard?: boolean}) => {
     })
 
     return (
-        <section className="w-full flex flex-col h-full   min-h-[100px]  min-w-[300px] max-w-[500px] max-[1074px]:h-[1000px] min-[774px]:h-full  border border-[#1E40AF] rounded-lg  pb-4  ">
+        <section className="w-full flex flex-col h-full   min-h-[100px]  min-w-[300px]  max-[1074px]:h-[1000px] min-[774px]:h-full  border border-[#1E40AF] rounded-lg  pb-4  ">
             <header
                 className={`w-full min-h-[220px] mobile:min-h-[250px] h-auto ${isDashboard ? 'bg-[#1E40AF]' : 'bg-custom_slate-800'}  px-5  rounded-t-sm`}
             >

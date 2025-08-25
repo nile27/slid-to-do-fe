@@ -73,7 +73,7 @@ const Header = () => {
     })
 
     return (
-        <header className="w-full max-w-[470px] h-auto min-w-[200px]   flex-col mb-4  flex justify-start items-start gap-4">
+        <header className="w-full  h-auto min-w-[200px]   flex-col mb-4  flex justify-start items-start gap-4">
             <NewAddTodo data={todoData?.data} subject="todo" />
             <NewAddTodo data={noteData?.data} subject="note" />
         </header>
