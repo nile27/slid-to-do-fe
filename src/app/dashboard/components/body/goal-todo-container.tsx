@@ -4,17 +4,26 @@ import Image from 'next/image'
 import React, {useState} from 'react'
 
 import LoadingSpinner from '@/components/common/loading-spinner'
+import {useCustomQuery} from '@/hooks/use-custom-query'
 import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
 import {get} from '@/lib/common-api'
 
-import GoalListBody from './goal-list-body'
 import GoalTitleHeader from './goal-title-header'
+import ProgressBar from './todo-progress'
 
 import type {GoalResponse} from '@/types/goals'
-import ProgressBar from './todo-progress'
-import {useCustomQuery} from '@/hooks/use-custom-query'
 
-const GoalTodoContainer = () => {
+const getProgressData = async () => {
+    const response = await get<{progress: number}>({
+        endpoint: `todos/progress`,
+    })
+
+    return {
+        progress: response.data.progress,
+    }
+}
+
+const GoalTodoContainer = ({isDashboard}: {isDashboard: boolean}) => {
     const [totalCount, setTotalCount] = useState(0)
     const getGoalsData = () => {
         return async (cursor: number | undefined) => {
@@ -39,23 +48,8 @@ const GoalTodoContainer = () => {
         }
     }
 
-    const getProgressData = async () => {
-        try {
-            const response = await get<{progress: number}>({
-                endpoint: `todos/progress`,
-            })
-            console.log(response.data)
-            return {
-                progress: response.data.progress,
-            }
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                throw error
-            }
-            throw new Error(String(error))
-        }
-    }
-    const {data} = useCustomQuery<{progress: number}>(['allProgress'], async () => getProgressData(), {})
+    const {data} = useCustomQuery<{progress: number}>(['allProgress'], getProgressData, {})
+
     const {
         data: fetchGoals,
         ref: goalReference,
@@ -67,9 +61,11 @@ const GoalTodoContainer = () => {
     })
 
     return (
-        <section className="w-full flex flex-col h-full flex-1 min-h-[100px] min-w-[400px]  border border-[#1E40AF]  rounded-lg  pb-4  ">
-            <header className="w-full h-[220px] bg-[#1E40AF] px-5 pb-5 rounded-t-sm">
-                <div className=" flex justify-start items-center pl-4 pt-4 gap-2 mb-4">
+        <section className="w-full flex flex-col h-full   min-h-[100px]  min-w-[300px] max-w-[500px] max-[1074px]:h-[1000px] min-[774px]:h-full  border border-[#1E40AF] rounded-lg  pb-4  ">
+            <header
+                className={`w-full min-h-[220px] mobile:min-h-[250px] h-auto ${isDashboard ? 'bg-[#1E40AF]' : 'bg-custom_slate-800'}  px-5  rounded-t-sm`}
+            >
+                <div className=" flex justify-start items-center pl-4 pt-4 gap-2 mb-3">
                     <Image
                         src={'/dashboard/goals-todo.svg'}
                         alt="goal-todo"
@@ -82,11 +78,12 @@ const GoalTodoContainer = () => {
                 </div>
 
                 <ProgressBar
+                    isDashboard={isDashboard}
                     progress={typeof data?.progress === 'number' ? data.progress : 0}
                     totalCount={totalCount}
                 />
             </header>
-            <div className="  w-full h-full  relative overflow-auto">
+            <div className="  w-full h-full  relative overflow-y-auto max-[1074px]:h-[450px] ">
                 {loadingGoals ? (
                     <div className="  absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
                         <LoadingSpinner />
@@ -98,10 +95,14 @@ const GoalTodoContainer = () => {
                                 등록된 목표가 없습니다.
                             </div>
                         ) : (
-                            <div className=" p-4 w-full  flex-1 min-h-0 overflow-y-scroll">
+                            <div className=" p-4 w-full h-auto  max-[1074px]:h-[1000px]  overflow-y-scroll">
                                 {fetchGoals.map((myGoal: GoalResponse) => (
                                     <div key={myGoal.id} className="w-full h-auto flex flex-col rounded-lg p-2  mb-3">
-                                        <GoalTitleHeader title={myGoal.title} goalId={myGoal.id} />
+                                        <GoalTitleHeader
+                                            title={myGoal.title}
+                                            goalId={myGoal.id}
+                                            isDashboard={isDashboard}
+                                        />
                                     </div>
                                 ))}
 

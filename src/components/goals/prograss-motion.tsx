@@ -6,7 +6,7 @@ import {motion, useAnimation} from 'framer-motion'
 
 import type {GoalProgress} from '@/types/goals'
 
-export default function ProgressBar({progress}: GoalProgress) {
+export default function ProgressBar({progress, isDashboard}: GoalProgress) {
     const controls = useAnimation()
 
     useEffect(() => {
@@ -30,7 +30,7 @@ export default function ProgressBar({progress}: GoalProgress) {
                 <motion.div
                     initial={{scaleX: 0}}
                     animate={controls}
-                    className="h-full bg-custom_blue-400 origin-left rounded-r-full "
+                    className={`h-full ${isDashboard ? 'bg-custom_blue-400' : 'bg-custom_slate-800'}  origin-left rounded-r-full `}
                 />
             </div>
         </div>

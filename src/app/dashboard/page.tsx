@@ -5,12 +5,12 @@ import Headers from './components/header/header-container'
 
 const DashBoardPage = () => {
     return (
-        <section className=" w-full h-screen text-black pb-10 text-body-base overflow-x-hidden   bg-slate-100">
-            <div className=" w-full h-full desktop-layout  flex-1 min-h-0  ">
+        <section className=" w-full h-screen text-black   text-body-base overflow-x-hidden overflow-y-scroll  bg-slate-100">
+            <div className=" w-full h-full desktop-layout  ">
                 <h1 className="text-black text-title-base mb-4 ">대시보드</h1>
-                <div className=" flex w-full h-full  flex-1 min-h-0   justify-center gap-4">
+                <div className=" flex w-full pb-10 h-full  justify-center  gap-4 max-[1074px]:flex-col max-[1074px]:h-auto">
                     <Headers />
-                    <GoalTodoContainer />
+                    <GoalTodoContainer isDashboard />
                 </div>
             </div>
         </section>

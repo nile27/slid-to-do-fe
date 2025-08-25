@@ -4,8 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-import type {TodoResponse} from '@/types/todos'
 import type {NoteCommon} from '@/types/notes'
+import type {TodoResponse} from '@/types/todos'
 
 const NewAddTodo = ({data, subject}: {data: TodoResponse[] | NoteCommon[] | undefined; subject: 'note' | 'todo'}) => {
     return (

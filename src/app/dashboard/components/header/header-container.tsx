@@ -1,15 +1,14 @@
 'use client'
 
-import dynamic from 'next/dynamic'
-import React, {useEffect} from 'react'
+import React from 'react'
 
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {get} from '@/lib/common-api'
 
 import NewAddTodo from './new-addtodo'
 
-import type {TodoResponse} from '@/types/todos'
 import type {NoteCommon} from '@/types/notes'
+import type {TodoResponse} from '@/types/todos'
 
 interface TodoPage {
     data: TodoResponse[]

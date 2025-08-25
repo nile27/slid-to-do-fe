@@ -3,16 +3,13 @@
 import Link from 'next/link'
 import React from 'react'
 
-import AddTodoModal from '@/components/common/modal/add-todo-modal'
 import ProgressBar from '@/components/goals/prograss-motion'
 import {useCustomQuery} from '@/hooks/use-custom-query'
-import {useModal} from '@/hooks/use-modal'
 import {get} from '@/lib/common-api'
 
 import type {GoalProgress} from '@/types/goals'
 
-const GoalTitleHeader = ({goalId, title}: {goalId: number; title: string}) => {
-    const {openModal} = useModal(<AddTodoModal goalId={goalId} />)
+const GoalTitleHeader = ({goalId, title, isDashboard}: {goalId: number; title: string; isDashboard: boolean}) => {
     const {data: progressData} = useCustomQuery<number>(['todos', goalId, 'dashProgress'], async () => {
         const response = await get<GoalProgress>({
             endpoint: `todos/progress?goalId=${goalId}`,
@@ -31,7 +28,7 @@ const GoalTitleHeader = ({goalId, title}: {goalId: number; title: string}) => {
                     {title}
                 </Link>
             </div>
-            <ProgressBar progress={progressData || 0} />
+            <ProgressBar progress={progressData || 0} isDashboard={isDashboard} />
         </div>
     )
 }

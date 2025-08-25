@@ -3,22 +3,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import LoadingSpinner from '@/components/common/loading-spinner'
-import AddTodoModal from '@/components/common/modal/add-todo-modal'
-import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
-import {useModal} from '@/hooks/use-modal'
-import {get} from '@/lib/common-api'
-
-import ButtonStyle from '../../style/button-style'
-
-import type {Goal, GoalResponse} from '@/types/goals'
-
-interface MenuList {
-    [key: string]: string
-}
+type Menu = Record<string, string>
 
 const GoalList = () => {
-    let menuList: MenuList[] = [
+    const menuList: Menu[] = [
         {
             name: '대시 보드',
             href: '/',
@@ -49,7 +37,7 @@ const GoalList = () => {
             <p className=" border-b-1 border-custom_slate-300 p-2 pl-4 mb-2 text-body-base">Menu</p>
 
             <ul className="w-full h-auto  space-y-2.5">
-                {menuList.map((item: MenuList) => (
+                {menuList.map((item: Menu) => (
                     <Link
                         href={item.href}
                         key={item.name}

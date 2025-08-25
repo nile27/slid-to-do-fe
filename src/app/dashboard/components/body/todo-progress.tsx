@@ -1,13 +1,12 @@
 'use client'
 
-import Image from 'next/image'
 import {useEffect} from 'react'
 
 import {motion, useAnimation} from 'framer-motion'
 
 import type {GoalProgress} from '@/types/goals'
 
-export default function ProgressBar({progress, totalCount = 0}: GoalProgress) {
+export default function ProgressBar({progress, totalCount = 0, isDashboard}: GoalProgress) {
     const controls = useAnimation()
 
     useEffect(() => {
@@ -21,17 +20,21 @@ export default function ProgressBar({progress, totalCount = 0}: GoalProgress) {
     }, [progress, controls])
 
     return (
-        <div className=" w-full gap-4 items-center bg-white p-5 rounded-xl">
-            <div className="flex justify-between items-center w-full mt-3 mb-3 bg-white px-3">
-                <div className=" text-body-lg font-semibold text-[#1E40AF] ">{progress}% complete</div>
-                <div className="flex-shrink font-semibold text-body  ">내 목표 개수: {totalCount}</div>
+        <div className=" w-full h-auto gap-4 items-center bg-white p-5 rounded-xl mb-5">
+            <div className="flex justify-between items-center w-full mt-3 mb-3  mobile:flex-col mobile:items-start bg-white px-3">
+                <div
+                    className={` text-body-base font-semibold ${isDashboard ? 'text-[#1E40AF]' : 'text-custom_slate-800'}   `}
+                >
+                    {progress}% complete
+                </div>
+                <div className="flex-shrink font-semibold text-body-base  ">총 목표: {totalCount}</div>
             </div>
 
             <div className="bg-custom_slate-50 overflow-hidden rounded-full h-3 w-full">
                 <motion.div
                     initial={{scaleX: 0}}
                     animate={controls}
-                    className="h-full bg-custom_blue-400 origin-left rounded-r-full "
+                    className={`h-full ${isDashboard ? 'bg-custom_blue-400' : 'bg-custom_slate-800'}  origin-left rounded-r-full "`}
                 />
             </div>
             <p className="w-full px-3 mt-2 text-[334155] opacity-20 text-[12px]">
