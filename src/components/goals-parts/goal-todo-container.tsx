@@ -61,11 +61,13 @@ const GoalTodoContainer = ({isDashboard = true}: {isDashboard?: boolean}) => {
     })
 
     return (
-        <section className="w-full flex flex-col h-full   min-h-[100px]  min-w-[300px]  max-[1074px]:h-[1000px] min-[774px]:h-full  border border-[#1E40AF] rounded-lg  pb-4  ">
+        <section
+            className={`w-full flex flex-col h-full min-h-[100px]  min-w-[300px] max-[1074px]:h-[1000px] min-[774px]:h-full border ${isDashboard ? 'border-[#1E40AF]' : 'border-custom_slate-800'} rounded-lg  pb-4`}
+        >
             <header
-                className={`w-full min-h-[220px] mobile:min-h-[250px] h-auto ${isDashboard ? 'bg-[#1E40AF]' : 'bg-custom_slate-800'}  px-5  rounded-t-sm`}
+                className={`w-full min-h-[220px] mobile:min-h-[250px] h-auto ${isDashboard ? 'bg-[#1E40AF]' : 'bg-custom_slate-800'} px-5 rounded-t-sm`}
             >
-                <div className=" flex justify-start items-center pl-4 pt-4 gap-2 mb-3">
+                <div className="flex justify-start items-center pl-4 pt-4 gap-2 mb-3">
                     <Image
                         src={'/dashboard/goals-todo.svg'}
                         alt="goal-todo"
@@ -74,7 +76,7 @@ const GoalTodoContainer = ({isDashboard = true}: {isDashboard?: boolean}) => {
                         className="text-white border border-white rounded-xl"
                     />
 
-                    <h1 className=" text-title-base font-semibold text-white ">목표 별 할 일</h1>
+                    <h1 className="text-title-base font-semibold text-white">목표 별 할 일</h1>
                 </div>
 
                 <ProgressBar
@@ -83,21 +85,21 @@ const GoalTodoContainer = ({isDashboard = true}: {isDashboard?: boolean}) => {
                     totalCount={totalCount}
                 />
             </header>
-            <div className="  w-full h-full  relative overflow-y-auto max-[1074px]:h-[450px] ">
+            <div className="w-full h-full relative overflow-y-auto max-[1074px]:h-[450px]">
                 {loadingGoals ? (
-                    <div className="  absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                         <LoadingSpinner />
                     </div>
                 ) : (
                     <>
                         {fetchGoals.length === 0 ? (
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm  ">
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm">
                                 등록된 목표가 없습니다.
                             </div>
                         ) : (
-                            <div className=" p-4 w-full h-auto  max-[1074px]:h-[1000px]  overflow-y-scroll">
+                            <div className="p-4 w-full h-auto max-[1074px]:h-[1000px]  overflow-y-scroll">
                                 {fetchGoals.map((myGoal: GoalResponse) => (
-                                    <div key={myGoal.id} className="w-full h-auto flex flex-col rounded-lg p-2  mb-3">
+                                    <div key={myGoal.id} className="w-full h-auto flex flex-col rounded-lg p-2 mb-3">
                                         <GoalTitleHeader
                                             title={myGoal.title}
                                             goalId={myGoal.id}
