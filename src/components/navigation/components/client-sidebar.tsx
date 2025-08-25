@@ -72,9 +72,11 @@ const ClientSidebar = ({isOpen, onClickHandler}: ClientInterface) => {
                 <hr className=" mt-5 -mx-5 border-t-2 border-gray-200" />
                 {/* 주요 네비게이션 */}
 
+
                 <SidebarList />
 
                 <SidebarProfile />
+
             </div>
         </>
     )

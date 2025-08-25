@@ -1,17 +1,20 @@
 'use client'
 
-import Image from 'next/image'
-import {useSearchParams} from 'next/navigation'
+import {useRouter, useSearchParams} from 'next/navigation'
+
+import clsx from 'clsx'
 
 import LoadingSpinner from '@/components/common/loading-spinner'
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
 import {get} from '@/lib/common-api'
+import {goalListApi} from '@/lib/goals/api'
 import {noteListApi} from '@/lib/notes/api'
 
 import {NoteList} from '../../components/notes/list'
 
 import type {ApiError} from '@/types/api'
+import type {GoalsListResponse} from '@/types/goals'
 import type {InfiniteScrollOptions} from '@/types/infinite-scroll'
 import type {NoteCommon} from '@/types/notes'
 
@@ -25,9 +28,8 @@ const Page = () => {
         ref,
         hasMore,
     } = useInfiniteScrollQuery({
-        queryKey: ['notes'],
+        queryKey: ['notes', goalId],
         fetchFn: (cursor) => noteListApi(goalId ?? undefined, cursor),
-        enabled: goalId !== null,
     } as InfiniteScrollOptions<NoteCommon>)
 
     const fetchGetGoalTitle = async (): Promise<{title: string}> => {
@@ -47,6 +49,17 @@ const Page = () => {
             return apiError.message || '알 수 없는 오류가 발생했습니다.'
         },
     })
+
+    // goal_list
+    const router = useRouter()
+    const {data: goal_list} = useCustomQuery<GoalsListResponse>(['goals'], goalListApi, {
+        errorDisplayType: 'toast',
+        mapErrorMessage: (error) => {
+            const apiError = error as ApiError
+            return apiError.message || '알 수 없는 오류가 발생했습니다.'
+        },
+    })
+
     if (isLoading || isGoalLoading) {
         return <LoadingSpinner />
     }
@@ -57,20 +70,36 @@ const Page = () => {
         <div className="bg-slate-100 flex flex-col w-full min-h-screen h-full overflow-y-auto">
             <div className="desktop-layout min-h-screen flex flex-col">
                 <header>
-                    <h1 className="text-subTitle text-custom_slate-900 ">노트 모아보기</h1>
+                    <h1 className="text-subTitle text-custom_slate-900 ">
+                        {!goalId && <span>모든 </span>}노트 모아보기
+                    </h1>
                 </header>
 
-                <div className="w-full mt-4 flex-1 flex flex-col">
-                    <div className="flex gap-2 items-center bg-white rounded-xl border border-custom_slate-100 py-3.5 px-6">
-                        <Image src="/goals/flag-goal.svg" alt="goal-flag" width={28} height={28} />
-                        <h2 className="text-subTitle-sm truncate">
-                            {' '}
-                            {notes.length > 0 ? notes?.[0]?.goal.title : goalData?.title}
-                        </h2>
-                    </div>
+                <div className={clsx('w-full  flex-1 flex flex-col', goalId ? 'mt-4' : 'mt-0')}>
+                    {goalId && (
+                        <select
+                            value={goalId || ''}
+                            onChange={(event) => {
+                                ;<LoadingSpinner />
+                                router.push(`notes?goalId=${event.target.value}`)
+                            }}
+                            className={
+                                'appearance-none text-subTitle-sm truncate py-3.5 px-8 bg-white rounded-xl border border-custom_slate-100 bg-[url("/goals/flag-goal.svg")] bg-no-repeat bg-[length:28px_28px] bg-[left_1rem_center] pl-14'
+                            }
+                        >
+                            <option value={goalId}>{goalData?.title}</option>
+                            {goal_list?.goals?.map((goal) => (
+                                <option key={goal.id} value={goal.id}>
+                                    {goal.title}
+                                </option>
+                            ))}
+                        </select>
+                    )}
 
                     {notes.length > 0 ? (
                         <>
+                            {hasMore && !isLoading && notes.length > 0 && <div ref={ref} />}
+
                             <NoteList notesData={notes} />
                             {!hasMore && notes.length > 0 && (
                                 <div className="mt-4 text-gray-400 text-sm flex items-center justify-center">
