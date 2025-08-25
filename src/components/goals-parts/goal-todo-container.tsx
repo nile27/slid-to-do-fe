@@ -23,7 +23,7 @@ const getProgressData = async () => {
     }
 }
 
-const GoalTodoContainer = ({isDashboard}: {isDashboard: boolean}) => {
+const GoalTodoContainer = ({isDashboard = true}: {isDashboard?: boolean}) => {
     const [totalCount, setTotalCount] = useState(0)
     const getGoalsData = () => {
         return async (cursor: number | undefined) => {

@@ -1,6 +1,7 @@
 import React from 'react'
 
-import GoalTodoContainer from './components/body/goal-todo-container'
+import GoalTodoContainer from '@/components/goals-parts/goal-todo-container'
+
 import Headers from './components/header/header-container'
 
 const DashBoardPage = () => {
@@ -10,7 +11,7 @@ const DashBoardPage = () => {
                 <h1 className="text-black text-title-base mb-4 ">대시보드</h1>
                 <div className=" flex w-full pb-10 h-full  justify-center  gap-4 max-[1074px]:flex-col max-[1074px]:h-auto">
                     <Headers />
-                    <GoalTodoContainer isDashboard />
+                    <GoalTodoContainer />
                 </div>
             </div>
         </section>

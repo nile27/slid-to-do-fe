@@ -18,6 +18,7 @@ export interface GoalResponse extends Goal {
 export interface GoalProgress {
     progress: number
     totalCount?: number
+    isDashboard: boolean
 }
 
 export interface GoalsListResponse {
