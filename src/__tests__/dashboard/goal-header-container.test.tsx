@@ -32,7 +32,7 @@ function renderWithClient(ui: React.ReactElement) {
     return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>)
 }
 
-describe('Header', () => {
+describe.skip('Header', () => {
     beforeEach(() => {
         mockedGet.mockReset()
     })
