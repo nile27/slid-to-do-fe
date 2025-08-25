@@ -10,6 +10,7 @@ import {get} from '@/lib/common-api'
 
 import GoalTitleHeader from './goal-title-header'
 import ProgressBar from './todo-progress'
+import {HasmoreLoading} from '../common/hasmore-loading'
 
 import type {GoalResponse} from '@/types/goals'
 
@@ -108,7 +109,7 @@ const GoalTodoContainer = ({isDashboard = true}: {isDashboard?: boolean}) => {
                                     </div>
                                 ))}
 
-                                {hasMoreGoals && <div ref={goalReference} />}
+                                {hasMoreGoals && <HasmoreLoading ref={goalReference} />}
 
                                 {!hasMoreGoals && (
                                     <div className="mt-4 w-full text-center text-gray-400 text-sm">
