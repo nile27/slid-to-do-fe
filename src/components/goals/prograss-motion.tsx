@@ -6,7 +6,7 @@ import {motion, useAnimation} from 'framer-motion'
 
 import type {GoalProgress} from '@/types/goals'
 
-export default function ProgressBar({progress}: GoalProgress) {
+export default function ProgressBar({progress, isDashboard}: GoalProgress) {
     const controls = useAnimation()
 
     useEffect(() => {
@@ -20,11 +20,19 @@ export default function ProgressBar({progress}: GoalProgress) {
     }, [progress, controls])
 
     return (
-        <div className="flex gap-4 items-center">
-            <div className="bg-custom_slate-50 overflow-hidden rounded-sm h-1 w-full">
-                <motion.div initial={{scaleX: 0}} animate={controls} className="h-full bg-black origin-left" />
+        <div className=" gap-4 items-center">
+            <div className="flex justify-between items-center w-full mt-6 mb-4">
+                <div className=" text-subBody font-semibold">Progress</div>
+                <div className="flex-shrink font-semibold text-subBody">{progress}%</div>
             </div>
-            <div className="flex-shrink font-semibold text-subBody">{progress}%</div>
+
+            <div className="bg-custom_slate-50 overflow-hidden rounded-full h-3 w-full">
+                <motion.div
+                    initial={{scaleX: 0}}
+                    animate={controls}
+                    className={`h-full ${isDashboard ? 'bg-custom_blue-400' : 'bg-custom_slate-800'}  origin-left rounded-r-full `}
+                />
+            </div>
         </div>
     )
 }
