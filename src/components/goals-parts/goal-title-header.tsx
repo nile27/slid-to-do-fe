@@ -19,8 +19,8 @@ const GoalTitleHeader = ({goalId, title, isDashboard}: {goalId: number; title: s
     })
 
     return (
-        <div className="w-full h-auto p-4 border border-[#D4D5D5] rounded-lg  ">
-            <div className="w-full h-auto p-2 flex justify-between items-center min-w-0">
+        <div className="w-full h-auto p-4 border border-[#D4D5D5] rounded-lg bf-">
+            <div className="w-full h-auto p-2 pl-0 flex justify-between items-center min-w-0">
                 <Link
                     href={`/goals/${goalId}`}
                     className="flex-1 min-w-0 text-title-base font-semibold cursor-pointer truncate"

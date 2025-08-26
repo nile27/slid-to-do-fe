@@ -1,11 +1,12 @@
 'use client'
 
 import Image from 'next/image'
-import {useRef, useState} from 'react'
+import {useCallback, useRef, useState} from 'react'
 
 import {useQueryClient} from '@tanstack/react-query'
 import axios from 'axios'
 import clsx from 'clsx'
+import {useDropzone} from 'react-dropzone'
 
 import ButtonStyle from '@/components/style/button-style'
 import InputStyle from '@/components/style/input-style'
@@ -40,6 +41,19 @@ const EditTodoModal = ({todoDetail}: {todoDetail: TodoResponse}) => {
     const {clearModal} = useModalStore()
 
     const {showToast} = useToast()
+
+    const onDrop = useCallback((acceptedFiles: File[]) => {
+        if (acceptedFiles.length > 0) {
+            setFile(acceptedFiles[0])
+        }
+    }, [])
+
+    const {getRootProps, getInputProps} = useDropzone({
+        accept: {
+            'image/*': ['.jpeg', '.jpg', '.png'],
+        },
+        onDrop,
+    })
 
     const {data: goals, isLoading: isLoadingGoals} = useCustomQuery<GoalsListResponse>(['goals'], goalListApi, {
         errorDisplayType: 'toast',
@@ -276,6 +290,7 @@ const EditTodoModal = ({todoDetail}: {todoDetail: TodoResponse}) => {
                                     fileInputReference.current?.click()
                                 }
                             }}
+                            {...getRootProps()}
                         >
                             {file || inputs.fileUrl ? (
                                 <Image src="/todos/ic-uploaded.svg" alt="Uploaded Icon" width={24} height={24} />
@@ -293,7 +308,13 @@ const EditTodoModal = ({todoDetail}: {todoDetail: TodoResponse}) => {
                                 </div>
                             )}
 
-                            <input type="file" hidden ref={fileInputReference} onChange={handleFileChange} />
+                            <input
+                                type="file"
+                                hidden
+                                ref={fileInputReference}
+                                onChange={handleFileChange}
+                                {...getInputProps()}
+                            />
                         </div>
                     )}
                 </div>
