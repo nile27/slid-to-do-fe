@@ -173,7 +173,9 @@ const NoteEditCompo = ({noteId}: {noteId: string}) => {
                     </div>
                 </div>
             ) : (
-                <LoadingSpinner />
+                <div className="absolute top-1/2 -translate-y-1/2">
+                    <LoadingSpinner />
+                </div>
             )}
         </>
     )

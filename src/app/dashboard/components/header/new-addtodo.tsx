@@ -6,6 +6,7 @@ import React from 'react'
 
 import type {NoteCommon} from '@/types/notes'
 import type {TodoResponse} from '@/types/todos'
+import { NewAddtodoSkeleton } from '@/components/ui/skeleton/dashboard/new-addtodo-skeleton'
 
 const NewAddTodo = ({data, subject}: {data: TodoResponse[] | NoteCommon[] | undefined; subject: 'note' | 'todo'}) => {
     return (
@@ -42,9 +43,10 @@ const NewAddTodo = ({data, subject}: {data: TodoResponse[] | NoteCommon[] | unde
                     ))}
                 </ul>
             ) : (
-                <div className="flex h-[100px] w-full text-sm justify-center items-center">
-                    최근 등록한 일이 없습니다.
-                </div>
+                // <div className="flex h-[100px] w-full text-sm justify-center items-center">
+                //     최근 등록한 일이 없습니다.
+                // </div>
+                <NewAddtodoSkeleton/>
             )}
         </article>
     )

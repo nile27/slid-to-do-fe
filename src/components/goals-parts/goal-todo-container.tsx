@@ -13,6 +13,7 @@ import ProgressBar from './todo-progress'
 import {HasmoreLoading} from '../common/hasmore-loading'
 
 import type {GoalResponse} from '@/types/goals'
+import {GoalsTodoContainerSkeleton} from '../ui/skeleton/goals/goals-todo-container-skeleton'
 
 const getProgressData = async () => {
     const response = await get<{progress: number}>({
@@ -79,12 +80,15 @@ const GoalTodoContainer = ({isDashboard = true}: {isDashboard?: boolean}) => {
 
                     <h1 className="text-title-base font-semibold text-white">목표 별 할 일</h1>
                 </div>
-
-                <ProgressBar
-                    isDashboard={isDashboard}
-                    progress={typeof data?.progress === 'number' ? data.progress : 0}
-                    totalCount={totalCount}
-                />
+                {data ? (
+                    <ProgressBar
+                        isDashboard={isDashboard}
+                        progress={typeof data?.progress === 'number' ? data.progress : 0}
+                        totalCount={totalCount}
+                    />
+                ) : (
+                    <GoalsTodoContainerSkeleton />
+                )}
             </header>
             <div className="w-full h-full relative overflow-y-auto max-[1074px]:h-[450px]">
                 {loadingGoals ? (
