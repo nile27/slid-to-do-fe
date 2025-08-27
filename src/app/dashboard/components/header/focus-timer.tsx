@@ -1,71 +1,126 @@
-import React, {useState} from 'react'
+'use client'
 
-import {useTimer} from '@/hooks/use-timer'
-import {useTimerStore} from '@/store/store'
+import Image from 'next/image'
+import React, {useEffect, useState} from 'react'
+
+import {useFocusTimerStore} from '@/store/timer-store'
+
+import {handleChange} from '../../util/util'
 
 const FocusTimer = () => {
-    const {time, setTime, start, pause, reset, isRunning} = useTimerStore()
-    useTimer()
+    const {hours, minutes, seconds, isRunning, start, pause, reset, stop, setTime} = useFocusTimerStore()
+    const [editMode, setEditMode] = useState(false)
+    const [h, setH] = useState(hours)
+    const [m, setM] = useState(minutes)
+    const [s, setS] = useState(seconds)
 
-    const [isEditing, setIsEditing] = useState(false)
-    const [minutes, setMinutes] = useState(Math.floor(time / 60))
-    const [seconds, setSeconds] = useState(time % 60)
-
-    const handleSave = () => {
-        setTime(minutes * 60 + seconds)
-        setIsEditing(false)
+    const saveTime = () => {
+        setTime(h, m, s)
+        setEditMode(false)
     }
 
-    return (
-        <div className="p-4 rounded-lg bg-slate-800 text-white w-[300px]">
-            <h2 className="mb-2 font-bold">집중 타이머</h2>
+    const onMinutes = handleChange(setM)
+    const onSeconds = handleChange(setS)
 
-            {/* 시간 표시 or 입력 */}
-            {isEditing ? (
-                <div className="flex gap-2 mb-3">
+    useEffect(() => {
+        if (editMode) {
+            setH(hours)
+            setM(minutes)
+            setS(seconds)
+        }
+    }, [editMode])
+
+    return (
+        <div className="bg-slate-800 text-white p-6 rounded-xl w-full ">
+            <header className="flex gap-2 mb-4 text-title-base justify-between items-center ">
+                <div className="flex gap-2 text-title-base items-center">
+                    <div className="text-white border border-white rounded-xl w-[40px] h-[40px] flex justify-center items-center">
+                        <Image src={'/dashboard/clock-filled.svg'} alt="clock" width={20} height={20} />
+                    </div>
+
+                    <h2 className=" text-center gap-2 text-lg font-semibold "> 집중 타이머</h2>
+                </div>
+                {!isRunning && (
+                    <div className="flex justify-center gap-2  ">
+                        {editMode ? (
+                            <button onClick={saveTime} className="px-4 py-2 bg-blue-500 rounded">
+                                저장
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() => setEditMode(true)}
+                                className="px-4 py-2 border shadow-sm shadow-custom_slate-300 hover:bg-custom_slate-700 bg-custom_slate-600 text-white rounded"
+                            >
+                                시간 설정하기
+                            </button>
+                        )}
+                    </div>
+                )}
+            </header>
+
+            {editMode ? (
+                <div className="flex items-center gap-2 justify-center mb-4">
                     <input
-                        type="number"
-                        value={minutes}
-                        onChange={(event_) => setMinutes(Number(event_.target.value))}
-                        className="w-12 text-black rounded p-1"
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={2}
+                        value={h}
+                        min={0}
+                        max={10}
+                        onChange={(event_) => setH(Number(event_.target.value))}
+                        className="w-12 text-black px-2 py-2 bg-white font-bold text-center text-2xl outline-none rounded"
                     />
-                    :
+                    <span className="text-3xl font-bold  text-center">:</span>
                     <input
-                        type="number"
-                        value={seconds}
-                        onChange={(event_) => setSeconds(Number(event_.target.value))}
-                        className="w-12 text-black rounded p-1"
+                        type="text"
+                        inputMode="numeric"
+                        pattern="\d*"
+                        value={m}
+                        onChange={onMinutes}
+                        className="w-12 text-2xl  px-2 py-2 text-black bg-white font-bold outline-none  text-center rounded"
                     />
-                    <button onClick={handleSave} className="ml-2 bg-green-500 text-white px-2 py-1 rounded">
-                        저장
-                    </button>
+                    <span className="text-3xl font-bold text-center">:</span>
+                    <input
+                        type="text"
+                        inputMode="numeric"
+                        pattern="\d*"
+                        value={s}
+                        onChange={onSeconds}
+                        className="w-12 text-2xl  px-2 py-2 text-black bg-white font-bold outline-none text-center rounded"
+                    />
                 </div>
             ) : (
-                <div className=" flex gap-3 text-center items-center">
-                    <p className="text-4xl mb-3 text-center">{String(Math.floor(time / 60)).padStart(2, '0')}</p>
-                    <p className="text-center text-title-xl ">:</p>
-                    <p className="text-4xl mb-3 text-center">{String(time % 60).padStart(2, '0')}</p>
+                <div className="text-5xl font-bold text-center mb-4">
+                    {String(hours).padStart(2, '0')}:{String(minutes).padStart(2, '0')}:
+                    {String(seconds).padStart(2, '0')}
                 </div>
             )}
 
-            {/* 컨트롤 버튼 */}
-            <div className="flex gap-2">
-                {isRunning ? (
-                    <button onClick={pause} className="bg-yellow-500 px-3 py-1 rounded text-black">
-                        일시정지
+            {!editMode && (
+                <div className="flex justify-center gap-2 mb-4">
+                    {isRunning ? (
+                        <button
+                            onClick={pause}
+                            className="flex justify-center items-center  w-8 h-8 bg-white rounded-full "
+                        >
+                            <Image src={'/dashboard/pause.svg'} alt="pause" width={15} height={15} />
+                        </button>
+                    ) : (
+                        <button
+                            onClick={start}
+                            className=" flex justify-center items-center w-8 h-8 bg-white rounded-full"
+                        >
+                            <Image src={'/dashboard/play.svg'} alt="play" width={24} height={24} />
+                        </button>
+                    )}
+                    <button onClick={stop} className="flex justify-center items-center  bg-white w-8 h-8 rounded-full">
+                        <Image src={'/dashboard/stop.svg'} alt="stop" width={24} height={24} />
                     </button>
-                ) : (
-                    <button onClick={start} className="bg-green-500 px-3 py-1 rounded text-black">
-                        시작하기
+                    <button onClick={reset} className="flex justify-center items-center  bg-white rounded-full w-8 h-8">
+                        <Image src={'/dashboard/reset.svg'} alt="stop" width={24} height={24} />
                     </button>
-                )}
-                <button onClick={() => reset()} className="bg-red-500 px-3 py-1 rounded text-white">
-                    초기화
-                </button>
-                <button onClick={() => setIsEditing(true)} className="bg-gray-300 px-3 py-1 rounded text-black">
-                    수정하기
-                </button>
-            </div>
+                </div>
+            )}
         </div>
     )
 }

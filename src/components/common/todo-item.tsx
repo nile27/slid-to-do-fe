@@ -13,7 +13,8 @@ import SideModal from './modal/side-modal'
 import type {TodoResponse} from '@/types/todos'
 
 /** SSR-안전 포탈 컴포넌트 */
-function Portal({children}: {children: React.ReactNode}) {
+
+const Portal = ({children}: {children: React.ReactNode}) => {
     const [mounted, setMounted] = useState(false)
     useEffect(() => setMounted(true), [])
     if (!mounted) return undefined

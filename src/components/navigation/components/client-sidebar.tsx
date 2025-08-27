@@ -10,6 +10,7 @@ import useModal from '@/hooks/use-modal'
 
 import SidebarList from './goal-list'
 import GoalModal from './goal-modal'
+import SideTimer from './side-timer'
 import SidebarProfile from './sidebar-profile'
 import ButtonStyle from '../../style/button-style'
 
@@ -65,18 +66,15 @@ const ClientSidebar = ({isOpen, onClickHandler}: ClientInterface) => {
             <div
                 className={` flex-1 min-h-0    flex-col w-full h-full  ${isOpen === 'noState' ? 'flex tablet:hidden mobile:hidden' : isOpen ? 'flex animate-opacity-open ' : ' animate-opacity-close mobile:hidden'}`}
             >
+                {/* 주요 네비게이션 */}
+
+                <SideTimer />
                 <ButtonStyle size="full" onClick={openModal}>
                     + 새 목표
                 </ButtonStyle>
-
-                <hr className=" mt-5 -mx-5 border-t-2 border-gray-200" />
-                {/* 주요 네비게이션 */}
-
-
                 <SidebarList />
 
                 <SidebarProfile />
-
             </div>
         </>
     )

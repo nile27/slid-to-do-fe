@@ -6,7 +6,7 @@ import {motion, useAnimation} from 'framer-motion'
 
 import type {GoalProgress} from '@/types/goals'
 
-export default function ProgressBar({progress, isDashboard}: GoalProgress) {
+const ProgressBar = ({progress, isDashboard}: GoalProgress) => {
     const controls = useAnimation()
 
     useEffect(() => {
@@ -36,3 +36,5 @@ export default function ProgressBar({progress, isDashboard}: GoalProgress) {
         </div>
     )
 }
+
+export default ProgressBar
