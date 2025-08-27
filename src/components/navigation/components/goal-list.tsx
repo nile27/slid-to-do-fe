@@ -30,10 +30,7 @@ const GoalList = () => {
     ]
 
     return (
-        <nav
-            aria-labelledby="goals-heading"
-            className=" border-[#E2E8F0] h-full grow flex flex-col mt-4  flex-1 min-h-0 "
-        >
+        <nav aria-labelledby="goals-heading" className=" border-[#E2E8F0]   flex flex-col mt-4  h-[300px] ">
             <p className=" border-b-1 border-custom_slate-300 p-2 pl-4 mb-2 text-body-base">Menu</p>
 
             <ul className="w-full h-auto  space-y-2.5">
