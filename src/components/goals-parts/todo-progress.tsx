@@ -20,26 +20,24 @@ export default function ProgressBar({progress, totalCount = 0, isDashboard}: Goa
     }, [progress, controls])
 
     return (
-        <div className=" w-full h-auto gap-4 items-center bg-white p-5 rounded-xl mb-5">
-            <div className="flex justify-between items-center w-full mt-3 mb-3  mobile:flex-col mobile:items-start bg-white px-3">
+        <div className="w-full h-auto gap-4 items-center bg-white p-5 rounded-xl mb-5">
+            <div className="flex justify-between items-center w-full mt-3 mb-3  mobile:flex-col mobile:items-start bg-white px-1">
                 <div
-                    className={` text-body-base font-semibold ${isDashboard ? 'text-[#1E40AF]' : 'text-custom_slate-800'}   `}
+                    className={`text-body-base font-semibold ${isDashboard ? 'text-[#1E40AF]' : 'text-custom_slate-800'}`}
                 >
                     {progress}% complete
                 </div>
-                <div className="flex-shrink font-semibold text-body-base  ">총 목표: {totalCount}</div>
+                <div className="flex-shrink font-semibold text-body-base">총 목표: {totalCount}</div>
             </div>
 
             <div className="bg-custom_slate-50 overflow-hidden rounded-full h-3 w-full">
                 <motion.div
                     initial={{scaleX: 0}}
                     animate={controls}
-                    className={`h-full ${isDashboard ? 'bg-custom_blue-400' : 'bg-custom_slate-800'}  origin-left rounded-r-full "`}
+                    className={`h-full ${isDashboard ? 'bg-custom_blue-400' : 'bg-custom_slate-800'}  origin-left rounded-r-full"`}
                 />
             </div>
-            <p className="w-full px-3 mt-2 text-[334155] opacity-20 text-[12px]">
-                전체 할 일 기준으로 보여지고 있습니다.
-            </p>
+            <p className="w-full px-1 mt-2 text-gray-700 text-[12px]">전체 할 일 기준으로 보여지고 있습니다.</p>
         </div>
     )
 }
