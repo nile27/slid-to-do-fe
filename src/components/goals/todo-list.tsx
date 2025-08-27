@@ -10,7 +10,7 @@ import EditTodoModal from '../common/modal/edit-todo-modal'
 
 import type {TodoResponse} from '@/types/todos'
 
-export default function InfiniteTodoList({
+const InfiniteTodoList = ({
     title,
     todos,
     isLoading,
@@ -30,7 +30,7 @@ export default function InfiniteTodoList({
     onToggle: (todoId: number, newDone: boolean) => void
     onDelete: (todoId: number) => void
     onAddClick?: () => void
-}) {
+}) => {
     /**할일 수정 모달 */
     const {openModal: openEditTodoModal} = useModal((todoDetail: TodoResponse) => (
         <EditTodoModal todoDetail={todoDetail} />
@@ -84,3 +84,5 @@ export default function InfiniteTodoList({
         </div>
     )
 }
+
+export default InfiniteTodoList

@@ -5,6 +5,7 @@ import React from 'react'
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {get} from '@/lib/common-api'
 
+import FocusTimer from './focus-timer'
 import NewAddTodo from './new-addtodo'
 
 import type {NoteCommon} from '@/types/notes'
@@ -76,6 +77,7 @@ const Header = () => {
         <header className="w-full  h-auto min-w-[200px]   flex-col mb-4  flex justify-start items-start gap-4">
             <NewAddTodo data={todoData?.data} subject="todo" />
             <NewAddTodo data={noteData?.data} subject="note" />
+            <FocusTimer />
         </header>
     )
 }

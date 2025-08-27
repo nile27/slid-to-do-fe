@@ -16,7 +16,7 @@ import ProgressBar from './prograss-motion'
 
 import type {Goal, GoalProgress} from '@/types/goals'
 
-export default function GoalHeader({
+const GoalHeader = ({
     goal,
     goalTitle,
     goalEdit,
@@ -36,7 +36,7 @@ export default function GoalHeader({
     goalDeleteModal: () => void
     handleInputUpdate: (event: React.ChangeEvent<HTMLInputElement>) => void
     handleGoalAction: (mode: string) => void
-}) {
+}) => {
     const [progress, setProgress] = useState<number>(0)
     const {goalId} = useParams()
     /** 목표 달성 API */
@@ -167,3 +167,5 @@ export default function GoalHeader({
         </div>
     )
 }
+
+export default GoalHeader

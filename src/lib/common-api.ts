@@ -55,6 +55,9 @@ axiosInstance.interceptors.response.use(
                 )
                 return axiosInstance(error.config)
             } catch (refreshError) {
+                if (typeof globalThis !== 'undefined') {
+                    globalThis.location.href = '/login'
+                }
                 return refreshError
             }
         }
