@@ -13,7 +13,7 @@ import {dateformat} from '../style/utils'
 
 import type {GoalProgress} from '@/types/goals'
 
-export default function Progress({goalId, title, createdAt}: {goalId: number; title: string; createdAt: string}) {
+const Progress = ({goalId, title, createdAt}: {goalId: number; title: string; createdAt: string}) => {
     const router = useRouter()
     const {data, isLoading} = useCustomQuery<GoalProgress>(
         ['goal', goalId, 'progress'],
@@ -74,3 +74,5 @@ export default function Progress({goalId, title, createdAt}: {goalId: number; ti
         </div>
     )
 }
+
+export default Progress
