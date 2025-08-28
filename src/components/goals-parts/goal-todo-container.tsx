@@ -3,7 +3,6 @@
 import Image from 'next/image'
 import React, {useState} from 'react'
 
-import LoadingSpinner from '@/components/common/loading-spinner'
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
 import {get} from '@/lib/common-api'
@@ -11,10 +10,10 @@ import {get} from '@/lib/common-api'
 import GoalTitleHeader from './goal-title-header'
 import ProgressBar from './todo-progress'
 import {HasmoreLoading} from '../common/hasmore-loading'
+import {GoalTitleHeaderSkeleton} from '../ui/skeleton/goals/goal-title-header-skeleton'
+import {GoalsTodoContainerSkeleton} from '../ui/skeleton/goals/goals-todo-container-skeleton'
 
 import type {GoalResponse} from '@/types/goals'
-import {GoalsTodoContainerSkeleton} from '../ui/skeleton/goals/goals-todo-container-skeleton'
-import {GoalTitleHeaderSkeleton} from '../ui/skeleton/goals/goal-title-header-skeleton'
 
 const getProgressData = async () => {
     const response = await get<{progress: number}>({
