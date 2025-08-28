@@ -56,7 +56,7 @@ const getNotesData = async () => {
 }
 
 const Header = () => {
-    const {data: todoData} = useCustomQuery<TodoPage>(['newTodo'], async () => getGoalsData(), {
+    const {data: todoData, isLoading: todoLoading} = useCustomQuery<TodoPage>(['newTodo'], async () => getGoalsData(), {
         select: (data: TodoPage): TodoPage => ({
             data: data.data
                 .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -65,7 +65,7 @@ const Header = () => {
         }),
     })
 
-    const {data: noteData} = useCustomQuery<NotePage>(['newNotes'], async () => getNotesData(), {
+    const {data: noteData, isLoading: noteLoding} = useCustomQuery<NotePage>(['newNotes'], async () => getNotesData(), {
         select: (data: NotePage): NotePage => ({
             data: data.data
                 .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -75,8 +75,8 @@ const Header = () => {
 
     return (
         <header className="w-full  h-auto min-w-[200px]   flex-col mb-4  flex justify-start items-start gap-4">
-            <NewAddTodo data={todoData?.data} subject="todo" />
-            <NewAddTodo data={noteData?.data} subject="note" />
+            <NewAddTodo data={todoData?.data} subject="todo" isLoading={todoLoading} />
+            <NewAddTodo data={noteData?.data} subject="note" isLoading={noteLoding} />
             <FocusTimer />
         </header>
     )
