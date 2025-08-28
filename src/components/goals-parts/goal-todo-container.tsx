@@ -14,6 +14,7 @@ import {HasmoreLoading} from '../common/hasmore-loading'
 
 import type {GoalResponse} from '@/types/goals'
 import {GoalsTodoContainerSkeleton} from '../ui/skeleton/goals/goals-todo-container-skeleton'
+import {GoalTitleHeaderSkeleton} from '../ui/skeleton/goals/goal-title-header-skeleton'
 
 const getProgressData = async () => {
     const response = await get<{progress: number}>({
@@ -92,10 +93,11 @@ const GoalTodoContainer = ({isDashboard = true}: {isDashboard?: boolean}) => {
             </header>
             <div className="w-full h-full relative overflow-y-auto max-[1074px]:h-[450px]">
                 {loadingGoals ? (
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                        <LoadingSpinner />
-                    </div>
+                    // <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    //     <LoadingSpinner />
+                    <GoalTitleHeaderSkeleton />
                 ) : (
+                    // </div>
                     <>
                         {fetchGoals.length === 0 ? (
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm">

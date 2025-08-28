@@ -289,7 +289,8 @@ const GoalsPage = () => {
             </Link>
 
             {isAnyLoading ? (
-                <LoadingSpinner />
+                // <LoadingSpinner />
+                <div></div>
             ) : (
                 <div className="mt-6 flex flex-col lg:flex-row gap-6 justify-between">
                     <InfiniteTodoList
