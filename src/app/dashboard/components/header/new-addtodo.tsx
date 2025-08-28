@@ -4,6 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
+import {NewAddtodoSkeleton} from '@/components/ui/skeleton/dashboard/new-addtodo-skeleton'
+
 import type {NoteCommon} from '@/types/notes'
 import type {TodoResponse} from '@/types/todos'
 
@@ -42,9 +44,10 @@ const NewAddTodo = ({data, subject}: {data: TodoResponse[] | NoteCommon[] | unde
                     ))}
                 </ul>
             ) : (
-                <div className="flex h-[100px] w-full text-sm justify-center items-center">
-                    최근 등록한 일이 없습니다.
-                </div>
+                // <div className="flex h-[100px] w-full text-sm justify-center items-center">
+                //     최근 등록한 일이 없습니다.
+                // </div>
+                <NewAddtodoSkeleton />
             )}
         </article>
     )
