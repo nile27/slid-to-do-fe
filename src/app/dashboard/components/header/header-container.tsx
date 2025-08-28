@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useEffect} from 'react'
+import React from 'react'
 
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {get} from '@/lib/common-api'
@@ -72,9 +72,7 @@ const Header = () => {
                 .slice(0, 5),
         }),
     })
-    useEffect(() => {
-        console.log(todoLoading, noteLoding)
-    }, [])
+
     return (
         <header className="w-full  h-auto min-w-[200px]   flex-col mb-4  flex justify-start items-start gap-4">
             <NewAddTodo data={todoData?.data} subject="todo" isLoading={todoLoading} />

@@ -44,7 +44,7 @@ const handleRequest = async (request: Request, method: HttpMethod) => {
     }
 }
 
-export const GET = async (req: Request) => handleRequest(req, 'GET')
-export const POST = async (req: Request) => handleRequest(req, 'POST')
-export const PATCH = async (req: Request) => handleRequest(req, 'PATCH')
-export const DELETE = async (req: Request) => handleRequest(req, 'DELETE')
+export const GET = async (request: Request) => handleRequest(request, 'GET')
+export const POST = async (request: Request) => handleRequest(request, 'POST')
+export const PATCH = async (request: Request) => handleRequest(request, 'PATCH')
+export const DELETE = async (request: Request) => handleRequest(request, 'DELETE')

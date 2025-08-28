@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import React, {useEffect} from 'react'
+import React from 'react'
 
 import {NewAddtodoSkeleton} from '@/components/ui/skeleton/dashboard/new-addtodo-skeleton'
 
@@ -18,10 +18,6 @@ const NewAddTodo = ({
     subject: 'note' | 'todo'
     isLoading: boolean
 }) => {
-    useEffect(() => {
-        console.log(data, isLoading)
-    }, [isLoading])
-
     return (
         <article className=" w-full  h-[200px] p-3 min-w-65 bg-white rounded-lg    ">
             <header className="flex justify-between items-center mb-4">
