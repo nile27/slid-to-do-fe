@@ -1,34 +1,54 @@
-import {createQueryKeys} from '@lukemorales/query-key-factory'
+import {goalDataApi, goalDeleteApi, goalListApi, goalUpdateApi} from './goals/api'
+import {noteListApi} from './notes/api'
+import {todoDeleteApi, todoUpdateApi} from './todos/api'
 
-/** // queries/users.ts
-export const users = createQueryKeys('users', {
-  all: null,
-  detail: (userId: string) => ({
-    queryKey: [userId],
-    queryFn: () => api.getUser(userId),
-  }),
-}); */
+// 목표
+export const goals = {
+    all: () => ({
+        queryKey: ['goal'] as const,
+    }),
+    list: () => ({
+        queryKey: ['goals'] as const,
+        queryFn: async () => await goalListApi(),
+    }),
+    detail: (goalId: string) => ({
+        queryKey: ['goal', goalId] as const,
+        queryFn: async () => await goalDataApi(goalId),
+    }),
+    update: (goalId: string, goalTitle: string) => ({
+        queryFn: async () => await goalUpdateApi(goalId, goalTitle),
+    }),
+    delete: (goalId: string) => ({
+        queryFn: async () => await goalDeleteApi(goalId),
+    }),
+}
 
-// queries/todos.ts
-export const todos = createQueryKeys('todos', {
-    detail: (todoId: string) => [todoId],
-    // list: (filters: TodoFilters) => ({
-    //     queryKey: [{filters}],
-    //     queryFn: (context) => api.getTodos({filters, page: context.pageParam}),
-    //     contextQueries: {
-    //         search: (query: string, limit = 15) => ({
-    //             queryKey: [query, limit],
-    //             queryFn: (context) =>
-    //                 api.getSearchTodos({
-    //                     page: context.pageParam,
-    //                     filters,
-    //                     limit,
-    //                     query,
-    //                 }),
-    //         }),
-    //     },
-    // }),
-})
+// 할일
+export const todos = {
+    all: () => ({
+        queryKey: ['todos'] as const,
+    }),
+    todosDone: () => ({
+        queryKey: ['todos', true] as const,
+    }),
+    todosNotDone: () => ({
+        queryKey: ['todos', false] as const,
+    }),
+    update: () => ({
+        queryFn: async ({todoId, newDone}: {todoId: number; newDone: boolean}) => todoUpdateApi(todoId, newDone),
+    }),
+    delete: () => ({
+        queryFn: async (todoId: number) => todoDeleteApi(todoId),
+    }),
+}
 
-// queries/index.ts
-// export const queries = mergeQueryKeys(users, todos)
+// 노트
+export const notes = {
+    all: () => ({
+        queryKey: ['notes'] as const,
+    }),
+    list: (goalId: string) => ({
+        queryKey: ['notes', goalId] as const,
+        queryFn: (cursor?: number) => noteListApi(goalId ?? undefined, cursor),
+    }),
+}
