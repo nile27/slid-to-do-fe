@@ -4,7 +4,7 @@ import React from 'react'
 
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {get} from '@/lib/common-api'
-import {notes} from '@/lib/query-keys'
+import {notes, todos} from '@/lib/query-keys'
 
 import FocusTimer from './focus-timer'
 import NewAddTodo from './new-addtodo'
@@ -57,27 +57,35 @@ const getNotesData = async () => {
 }
 
 const Header = () => {
-    const {data: todoData} = useCustomQuery<TodoPage>(['newtodo'], async () => getGoalsData(), {
-        select: (data: TodoPage): TodoPage => ({
-            data: data.data
-                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-                .filter((item) => !item.done)
-                .slice(0, 5),
-        }),
-    })
+    const {data: todoData, isLoading: todoLoading} = useCustomQuery<TodoPage>(
+        todos.newTodo(),
+        async () => getGoalsData(),
+        {
+            select: (data: TodoPage): TodoPage => ({
+                data: data.data
+                    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                    .filter((item) => !item.done)
+                    .slice(0, 5),
+            }),
+        },
+    )
 
-    const {data: noteData} = useCustomQuery<NotePage>(notes.newNotes(), async () => getNotesData(), {
-        select: (data: NotePage): NotePage => ({
-            data: data.data
-                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-                .slice(0, 5),
-        }),
-    })
+    const {data: noteData, isLoading: noteLoding} = useCustomQuery<NotePage>(
+        notes.newNotes(),
+        async () => getNotesData(),
+        {
+            select: (data: NotePage): NotePage => ({
+                data: data.data
+                    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                    .slice(0, 5),
+            }),
+        },
+    )
 
     return (
         <header className="w-full  h-auto min-w-[200px]   flex-col mb-4  flex justify-start items-start gap-4">
-            <NewAddTodo data={todoData?.data} subject="todo" />
-            <NewAddTodo data={noteData?.data} subject="note" />
+            <NewAddTodo data={todoData?.data} subject="todo" isLoading={todoLoading} />
+            <NewAddTodo data={noteData?.data} subject="note" isLoading={noteLoding} />
             <FocusTimer />
         </header>
     )

@@ -9,7 +9,15 @@ import {NewAddtodoSkeleton} from '@/components/ui/skeleton/dashboard/new-addtodo
 import type {NoteCommon} from '@/types/notes'
 import type {TodoResponse} from '@/types/todos'
 
-const NewAddTodo = ({data, subject}: {data: TodoResponse[] | NoteCommon[] | undefined; subject: 'note' | 'todo'}) => {
+const NewAddTodo = ({
+    data,
+    subject,
+    isLoading,
+}: {
+    data: TodoResponse[] | NoteCommon[] | undefined
+    subject: 'note' | 'todo'
+    isLoading: boolean
+}) => {
     return (
         <article className=" w-full  h-[200px] p-3 min-w-65 bg-white rounded-lg    ">
             <header className="flex justify-between items-center mb-4">
@@ -28,7 +36,7 @@ const NewAddTodo = ({data, subject}: {data: TodoResponse[] | NoteCommon[] | unde
                     <Image src="/goals/ic-arrow-right.svg" alt="노트보기 페이지 이동" width={24} height={24} />
                 </Link>
             </header>
-            {data ? (
+            {data && data.length > 0 ? (
                 <ul className=" list-none space-y-0.5 h-[130px] ">
                     {data?.map((item) => (
                         <li
@@ -43,11 +51,12 @@ const NewAddTodo = ({data, subject}: {data: TodoResponse[] | NoteCommon[] | unde
                         </li>
                     ))}
                 </ul>
-            ) : (
-                // <div className="flex h-[100px] w-full text-sm justify-center items-center">
-                //     최근 등록한 일이 없습니다.
-                // </div>
+            ) : isLoading ? (
                 <NewAddtodoSkeleton />
+            ) : (
+                <div className="flex h-[100px] w-full text-sm justify-center items-center">
+                    최근 등록한 일이 없습니다.
+                </div>
             )}
         </article>
     )

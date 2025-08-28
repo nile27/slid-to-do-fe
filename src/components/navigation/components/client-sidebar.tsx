@@ -22,7 +22,7 @@ const ClientSidebar = ({isOpen, onClickHandler}: ClientInterface) => {
 
     return (
         <>
-            <header className=" h-auto w-full border-b-[#E2E8F0] flex justify-between items-center mb-5">
+            <header className=" h-[33px] w-full border-b-[#E2E8F0] flex justify-between items-center mb-5">
                 <Link
                     href="/"
                     className={`${isOpen === 'noState' ? 'flex tablet:hidden mobile:hidden' : isOpen ? 'flex animate-opacity-open' : 'hidden animate-opacity-close '} w-auto h-[32px] min-w-[32px] flex`}
@@ -64,15 +64,16 @@ const ClientSidebar = ({isOpen, onClickHandler}: ClientInterface) => {
                 )}
             </header>
             <div
-                className={` flex-1 min-h-0    flex-col w-full h-full  ${isOpen === 'noState' ? 'flex tablet:hidden mobile:hidden' : isOpen ? 'flex animate-opacity-open ' : ' animate-opacity-close mobile:hidden'}`}
+                className={`  flex-1 min-h-0 justify-between    flex-col w-full h-full  ${isOpen === 'noState' ? 'flex tablet:hidden mobile:hidden' : isOpen ? 'flex animate-opacity-open ' : ' animate-opacity-close mobile:hidden'}`}
             >
                 {/* 주요 네비게이션 */}
-
-                <SideTimer />
-                <ButtonStyle size="full" onClick={openModal}>
-                    + 새 목표
-                </ButtonStyle>
-                <SidebarList />
+                <div className="w-full h-auto">
+                    <SideTimer />
+                    <ButtonStyle size="full" onClick={openModal}>
+                        + 새 목표
+                    </ButtonStyle>
+                    <SidebarList />
+                </div>
 
                 <SidebarProfile />
             </div>
