@@ -3,7 +3,6 @@
 import Image from 'next/image'
 import React, {useState} from 'react'
 
-import LoadingSpinner from '@/components/common/loading-spinner'
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
 import {get} from '@/lib/common-api'
@@ -11,6 +10,8 @@ import {get} from '@/lib/common-api'
 import GoalTitleHeader from './goal-title-header'
 import ProgressBar from './todo-progress'
 import {HasmoreLoading} from '../common/hasmore-loading'
+import {GoalTitleHeaderSkeleton} from '../ui/skeleton/goals/goal-title-header-skeleton'
+import {GoalsTodoContainerSkeleton} from '../ui/skeleton/goals/goals-todo-container-skeleton'
 
 import type {GoalResponse} from '@/types/goals'
 
@@ -79,19 +80,23 @@ const GoalTodoContainer = ({isDashboard = true}: {isDashboard?: boolean}) => {
 
                     <h1 className="text-title-base font-semibold text-white">목표 별 할 일</h1>
                 </div>
-
-                <ProgressBar
-                    isDashboard={isDashboard}
-                    progress={typeof data?.progress === 'number' ? data.progress : 0}
-                    totalCount={totalCount}
-                />
+                {data ? (
+                    <ProgressBar
+                        isDashboard={isDashboard}
+                        progress={typeof data?.progress === 'number' ? data.progress : 0}
+                        totalCount={totalCount}
+                    />
+                ) : (
+                    <GoalsTodoContainerSkeleton />
+                )}
             </header>
             <div className="w-full h-full relative overflow-y-auto max-[1074px]:h-[450px]">
                 {loadingGoals ? (
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                        <LoadingSpinner />
-                    </div>
+                    // <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    //     <LoadingSpinner />
+                    <GoalTitleHeaderSkeleton />
                 ) : (
+                    // </div>
                     <>
                         {fetchGoals.length === 0 ? (
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm">
