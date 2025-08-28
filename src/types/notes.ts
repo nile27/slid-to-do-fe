@@ -34,3 +34,25 @@ export interface NoteDataProperty {
     content: string
     linkUrl?: string
 }
+
+/** 노트 에디터 코드 메뉴 드롭다운 */
+export interface LanguageMenuPortalProps {
+    anchorRef: React.RefObject<HTMLElement | null>
+    isOpen: boolean
+    currentLang: string
+    options: readonly {label: string; value: string}[]
+    onSelect: (lang: string) => void
+    onClose: () => void
+}
+
+/** 노트 에디터 엔터 제한 */
+export interface MaxLinesOptions {
+    limit: number
+    allowSoftBreak?: boolean
+}
+
+/** 노트 에디터 글자수 제한 */
+export interface PasteLimiterOptions {
+    limit: number
+    onTruncate?: (info: {before: number; pasted: number; allowed: number}) => void
+}

@@ -1,12 +1,6 @@
+import type { PasteLimiterOptions } from '@/types/notes'
 import {Extension} from '@tiptap/core'
 import {Plugin} from 'prosemirror-state'
-
-export interface PasteLimiterOptions {
-    /** 총 허용 글자 수(plain text 기준) */
-    limit: number
-    /** 붙여넣기 차단/절단 시 콜백 */
-    onTruncate?: (info: {before: number; pasted: number; allowed: number}) => void
-}
 
 export const PasteLimiter = Extension.create<PasteLimiterOptions>({
     name: 'pasteLimiter',

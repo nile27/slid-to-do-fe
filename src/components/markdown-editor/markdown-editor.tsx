@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import {useEffect, useState} from 'react'
+import {useCallback, useEffect, useRef, useState} from 'react'
 
 import CharacterCount from '@tiptap/extension-character-count'
 import Link from '@tiptap/extension-link'
@@ -12,10 +12,20 @@ import StarterKit from '@tiptap/starter-kit'
 
 import useModal from '@/hooks/use-modal'
 import useToast from '@/hooks/use-toast'
+import useLayout from '@/hooks/use-layout'
 import {MaxLines} from '@/lib/notes/editor/max-lines'
 import {PasteLimiter} from '@/lib/notes/editor/paste-limiter'
 
 import LinkModal from '../common/modal/link-modal'
+
+import {lowlight, LANG_OPTIONS, dynamicRegister, prewarmPopular} from '@/lib/notes/editor/code-highlight'
+import {CustomCodeBlock} from '@/lib/notes/editor/custom-code-block'
+import {ensureTrailingParagraph} from '@/lib/notes/editor/trailing-paragraph'
+import IconButton from '../notes/button/icon-button'
+import clsx from 'clsx'
+import LanguageMenuPortal from '@/lib/notes/editor/language-menu-portal'
+
+import {TextSelection} from '@tiptap/pm/state'
 
 const Toolbar = ({
     editorInstance,
@@ -26,6 +36,8 @@ const Toolbar = ({
     linkButton?: string | undefined
     onSetLinkButton?: (link: string | undefined) => void
 }) => {
+    const langButtonRef = useRef<HTMLButtonElement>(null)
+    const lastCodePosRef = useRef<number | null>(null)
     /** 링크 modal */
     const {openModal, closeModal} = useModal(
         () => (
@@ -42,73 +54,273 @@ const Toolbar = ({
         },
     )
 
+    const isTablet = useLayout('tablet')
+    const isDesktop = useLayout('desktop')
+
+    /** 코드 하이라이트 */
+    const [langMenuOpen, setLangMenuOpen] = useState(false)
+    useEffect(() => {
+        prewarmPopular()
+    }, [])
+    const isCodeBlock = !!editorInstance?.isActive('codeBlock')
+    const currentLang = editorInstance?.getAttributes('codeBlock')?.language ?? ''
+
+    /** 언어 메뉴 드롭다운 */
+
+    const changeLanguage = useCallback(
+        async (lang: string) => {
+            const ed = editorInstance
+            if (!ed) return
+
+            // 0) 이미 같은 언어면 종료
+            const current = ed.getAttributes('codeBlock')?.language
+            if (current === lang) return
+
+            // 1) 에디터 포커스 고정 (end 금지)
+            ed.commands.focus()
+
+            // 2) 하이라이트 모듈 로드
+            await dynamicRegister(lang)
+
+            // 3) 현재 codeBlock 위치
+            let pos = getActiveCodeBlockPos(ed)
+            if (pos == null) return
+
+            // 4) selection을 codeBlock 내부로 한 번 확실히 고정
+            ed.commands.setTextSelection(pos + 1)
+
+            // 5) 한 트랜잭션으로 attrs 교체 + selection 유지
+            ed.commands.command(({state, tr, dispatch}) => {
+                const {codeBlock} = state.schema.nodes
+                const node = tr.doc.nodeAt(pos!)
+                if (!node || node.type !== codeBlock) return false
+
+                const nextAttrs = {...node.attrs, language: lang}
+                tr.setNodeMarkup(pos!, codeBlock, nextAttrs, node.marks)
+
+                // 커서를 codeBlock 내부에 그대로 유지
+                tr.setSelection(TextSelection.near(tr.doc.resolve(pos! + 1)))
+
+                // 스크롤 강제 이동은 하지 않음 (포털 닫힘과 타이밍 충돌 방지)
+                dispatch?.(tr)
+                return true
+            })
+
+            // 여기서 추가 focus() / requestAnimationFrame focus() 호출은 제거
+            lastCodePosRef.current = pos
+        },
+        [editorInstance, dynamicRegister],
+    )
+
+    const getActiveCodeBlockPos = (editor: any): number | null => {
+        const {$from} = editor.state.selection
+        for (let d = $from.depth; d >= 0; d--) {
+            const node = $from.node(d)
+            if (node.type.name === 'codeBlock') {
+                // 이 depth의 노드 시작 위치(노드 선택 pos)
+                return $from.before(d)
+            }
+        }
+        return null
+    }
+
+    const Separator = () => (
+        <span role="separator" aria-hidden="true" className="mx-[1px] h-5 w-px bg-slate-200/80 shrink-0" />
+    )
+
+    if (!editorInstance) return null
+
     return (
-        <div className="absolute flex w-full gap-4 p-2 bg-white rounded-full shadow-sm -bottom-24 border-slate-200">
-            <div className="flex gap-1">
-                <button
+        <div
+            className="scrollbar-custom absolute desktop:gap-4 tablet:gap-1 w-full flex items-center gap-1 px-2 py-1
+             rounded-sm border border-slate-200 bg-slate-50 backdrop-blur
+             shadow-[inset_0_1px_0_0_rgba(255,255,255,0.6)]
+             overflow-x-auto whitespace-nowrap"
+        >
+            <div className="desktop:gap-1 flex items-center shrink-0">
+                <IconButton
+                    title="Bold"
+                    active={editorInstance?.isActive('bold')}
                     onClick={() => editorInstance?.chain().focus().toggleBold().run()}
-                    className={`rounded-full hover:bg-blue-500 size-6 transition ${editorInstance?.isActive('bold') ? 'bg-blue-500' : 'bg-white'}`}
+                    variant="primary"
                 >
-                    <Image src="/markdown-editor/ic-bold.svg" alt="Bold" width={24} height={24} />
-                </button>
-                <button
+                    <Image
+                        src="/markdown-editor/ic-bold.svg"
+                        alt="Bold"
+                        width={isDesktop ? 24 : isTablet ? 22 : 20}
+                        height={isDesktop ? 24 : isTablet ? 22 : 20}
+                    />
+                </IconButton>
+
+                <IconButton
+                    title="Italic"
+                    active={editorInstance?.isActive('italic')}
                     onClick={() => editorInstance?.chain().focus().toggleItalic().run()}
-                    className={`rounded-full hover:bg-blue-500 size-6 font-bold transition ${editorInstance?.isActive('italic') ? 'bg-blue-500' : 'bg-white'}`}
+                    variant="primary"
                 >
-                    <Image src="/markdown-editor/ic-italic.svg" alt="Italic" width={24} height={24} />
-                </button>
-                <button
+                    <Image
+                        src="/markdown-editor/ic-italic.svg"
+                        alt="Italic"
+                        width={isDesktop ? 24 : isTablet ? 22 : 20}
+                        height={isDesktop ? 24 : isTablet ? 22 : 20}
+                    />
+                </IconButton>
+
+                <IconButton
+                    title="Underline"
+                    active={editorInstance?.isActive('underline')}
                     onClick={() => editorInstance?.chain().focus().toggleUnderline().run()}
-                    className={`rounded-full hover:bg-blue-500 size-6 font-bold transition ${editorInstance?.isActive('underline') ? 'bg-blue-500' : 'bg-white'}`}
                 >
-                    <Image src="/markdown-editor/ic-underline.svg" alt="Underline" width={24} height={24} />
-                </button>
+                    <Image
+                        src="/markdown-editor/ic-underline.svg"
+                        alt="Underline"
+                        width={isDesktop ? 24 : isTablet ? 22 : 20}
+                        height={isDesktop ? 24 : isTablet ? 22 : 20}
+                    />
+                </IconButton>
             </div>
-
-            <div className="flex gap-1">
-                <button
+            <Separator />
+            <div className="flex desktop:gap-1">
+                <IconButton
+                    title="left"
+                    active={editorInstance?.isActive('left')}
                     onClick={() => editorInstance?.chain().focus().toggleTextAlign('left').run()}
-                    className={`rounded-full hover:bg-blue-500 size-6 font-bold transition ${editorInstance?.isActive('left') ? 'bg-blue-500' : 'bg-white'}`}
                 >
-                    <Image src="/markdown-editor/ic-align-left.svg" alt="Left Align" width={24} height={24} />
-                </button>
-                <button
+                    <Image
+                        src="/markdown-editor/ic-align-left.svg"
+                        alt="Left Align"
+                        width={isDesktop ? 24 : isTablet ? 22 : 20}
+                        height={isDesktop ? 24 : isTablet ? 22 : 20}
+                    />
+                </IconButton>
+
+                <IconButton
+                    title="center"
+                    active={editorInstance?.isActive('center')}
                     onClick={() => editorInstance?.chain().focus().toggleTextAlign('center').run()}
-                    className={`rounded-full hover:bg-blue-500 size-6 font-bold transition ${editorInstance?.isActive('center') ? 'bg-blue-500' : 'bg-white'}`}
                 >
-                    <Image src="/markdown-editor/ic-align-center.svg" alt="Center Align" width={24} height={24} />
-                </button>
-                <button
+                    <Image
+                        src="/markdown-editor/ic-align-center.svg"
+                        alt="center Align"
+                        width={isDesktop ? 24 : isTablet ? 22 : 20}
+                        height={isDesktop ? 24 : isTablet ? 22 : 20}
+                    />
+                </IconButton>
+
+                <IconButton
+                    title="right"
+                    active={editorInstance?.isActive('right')}
                     onClick={() => editorInstance?.chain().focus().toggleTextAlign('right').run()}
-                    className={`rounded-full hover:bg-blue-500 size-6 font-bold transition ${editorInstance?.isActive('right') ? 'bg-blue-500' : 'bg-white'}`}
                 >
-                    <Image src="/markdown-editor/ic-align-right.svg" alt="Right Align" width={24} height={24} />
-                </button>
+                    <Image
+                        src="/markdown-editor/ic-align-right.svg"
+                        alt="right Align"
+                        width={isDesktop ? 24 : isTablet ? 22 : 20}
+                        height={isDesktop ? 24 : isTablet ? 22 : 20}
+                    />
+                </IconButton>
             </div>
-
-            <div className="flex gap-1">
-                <button
+            <Separator />
+            <div className="flex desktop:gap-1">
+                <IconButton
+                    title="bulletList"
+                    active={editorInstance?.isActive('bulletList')}
                     onClick={() => editorInstance?.chain().focus().toggleBulletList().run()}
-                    className={`rounded-full hover:bg-blue-500 size-6 font-bold transition ${editorInstance?.isActive('bulletList') ? 'bg-blue-500' : 'bg-white'}`}
                 >
-                    <Image src="/markdown-editor/ic-bullet-list.svg" alt="Bullet List" width={24} height={24} />
-                </button>
-                <button
-                    onClick={() => editorInstance?.chain().focus().toggleOrderedList().run()}
-                    className={`rounded-full hover:bg-blue-500 size-6 font-bold transition ${editorInstance?.isActive('orderedList') ? 'bg-blue-500' : 'bg-white'}`}
-                >
-                    <Image src="/markdown-editor/ic-ordered-list.svg" alt="Ordered List" width={24} height={24} />
-                </button>
-            </div>
+                    <Image
+                        src="/markdown-editor/ic-bullet-list.svg"
+                        alt="bullet List"
+                        width={isDesktop ? 24 : isTablet ? 22 : 20}
+                        height={isDesktop ? 24 : isTablet ? 22 : 20}
+                    />
+                </IconButton>
 
-            {!linkButton && (
-                <button
-                    onClick={openModal}
-                    className="rounded-full hover:bg-blue-500 size-6 font-bold transition bg-white"
+                <IconButton
+                    title="orderedList"
+                    active={editorInstance?.isActive('orderedList')}
+                    onClick={() => editorInstance?.chain().focus().toggleOrderedList().run()}
                 >
-                    <Image src="/markdown-editor/ic-link.svg" alt="Link Button" width={24} height={24} />
-                </button>
-            )}
+                    <Image
+                        src="/markdown-editor/ic-ordered-list.svg"
+                        alt="ordered List"
+                        width={isDesktop ? 24 : isTablet ? 22 : 20}
+                        height={isDesktop ? 24 : isTablet ? 22 : 20}
+                    />
+                </IconButton>
+            </div>
+            <Separator />
+            <div className="w-full flex items-center justify-center">
+                {' '}
+                {!linkButton && (
+                    <IconButton title="Link" onClick={openModal} className="mr-1">
+                        <Image
+                            src="/markdown-editor/ic-link.svg"
+                            alt="Link Button"
+                            width={isDesktop ? 24 : isTablet ? 22 : 20}
+                            height={isDesktop ? 24 : isTablet ? 22 : 20}
+                        />
+                    </IconButton>
+                )}
+                <IconButton
+                    title="Code block"
+                    onMouseDown={(e: any) => e.preventDefault()}
+                    onClick={() => {
+                        const ed = editorInstance
+                        if (!ed) return
+
+                        ed.chain().focus().toggleCodeBlock({language: 'javascript'}).run()
+
+                        const pos = getActiveCodeBlockPos(ed)
+                        if (pos != null) lastCodePosRef.current = pos
+
+                        ed.commands.setTextSelection((pos ?? 0) + 1)
+                        ed.commands.focus()
+                    }}
+                >
+                    <Image
+                        src="/markdown-editor/ic-code.svg"
+                        alt="Code block"
+                        width={isDesktop ? 24 : isTablet ? 22 : 20}
+                        height={isDesktop ? 24 : isTablet ? 22 : 20}
+                    />
+                </IconButton>
+                <div className="relative flex items-center ml-2 w-full h-full ">
+                    <button
+                        type="button"
+                        ref={langButtonRef}
+                        onMouseDown={(event) => {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }}
+                        onClick={(event) => {
+                            event.stopPropagation()
+                            const ed = editorInstance
+                            if (ed) {
+                                const p = getActiveCodeBlockPos(ed)
+                                if (p != null) lastCodePosRef.current = p
+                            }
+                            setLangMenuOpen((v) => !v)
+                        }}
+                        disabled={!isCodeBlock}
+                        className="bg-slate-200 disabled:opacity-50 text-xs text-slate-700 w-16 h-6 shrink-0 rounded-sm"
+                        title="Select language"
+                    >
+                        {currentLang || 'Language'}
+                    </button>
+
+                    <LanguageMenuPortal
+                        anchorRef={langButtonRef}
+                        isOpen={langMenuOpen}
+                        currentLang={currentLang}
+                        options={LANG_OPTIONS}
+                        onSelect={async (lang) => {
+                            await changeLanguage(lang)
+                            setLangMenuOpen(false)
+                        }}
+                        onClose={() => setLangMenuOpen(false)}
+                    />
+                </div>
+            </div>
         </div>
     )
 }
@@ -134,7 +346,8 @@ const MarkdownEditor = ({
 
     const editorInstance = useEditor({
         extensions: [
-            StarterKit,
+            StarterKit.configure({codeBlock: false}),
+            CustomCodeBlock.configure({lowlight}),
             Underline,
             Link.configure({
                 openOnClick: false,
@@ -160,13 +373,23 @@ const MarkdownEditor = ({
         ],
         content: '',
         immediatelyRender: false,
-
+        onCreate: ({editor}) => {
+            ensureTrailingParagraph(editor.view) // ✅ 추가
+        },
         onUpdate: ({editor}) => {
             onUpdate(editor.getHTML())
+            ensureTrailingParagraph(editor.view)
         },
         editorProps: {
             attributes: {
                 class: 'prose focus:outline-none',
+            },
+
+            handleDOMEvents: {
+                compositionend: (view) => {
+                    ensureTrailingParagraph(view)
+                    return false
+                },
             },
         },
     })
@@ -184,48 +407,46 @@ const MarkdownEditor = ({
     return (
         <div
             onClick={(event) => {
-                if ((event.target as HTMLElement).closest('.ProseMirror')) return
-                editorInstance?.commands.focus('end')
+                const el = event.target as HTMLElement
+                if (el.closest('.ProseMirror')) return
+                if (el.closest('[data-editor-toolbar]')) return // 툴바 클릭은 무시
+                if (el.closest('[data-lang-portal]')) return
+                editorInstance?.commands.focus()
             }}
             className={`relative max-w-full min-w-64 min-h-64 cursor-pointer ${className}`}
         >
-            <div className="text-xs font-medium">
-                글자 수 : {editorInstance.storage.characterCount.characters()} | 단어 수 :{' '}
-                {editorInstance.storage.characterCount.words()}
-            </div>
-
-            {internalLink && (
-                <div className="mt-2 bg-custom_slate-200 p-1 rounded-full flex justify-between items-center">
-                    <div className="flex items-end gap-2 flex-1 min-w-0 max-w-full p-1 ">
-                        <Image src="/markdown-editor/ic-save-link.svg" alt="링크아이콘" width={24} height={24} />
-                        <a
-                            href={internalLink}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="block overflow-hidden text-ellipsis whitespace-nowrap max-w-full text-body text-custom_slate-800"
+            <Toolbar editorInstance={editorInstance} linkButton={linkButton} onSetLinkButton={onSetLinkButton} />
+            <div className="h-12">
+                {internalLink && (
+                    <div className="absolute top-12 w-full my-4 bg-custom_slate-200 p-1 rounded-full flex justify-between items-center">
+                        <div className="flex items-end gap-2 flex-1 min-w-0 max-w-full p-1">
+                            <Image src="/markdown-editor/ic-save-link.svg" alt="링크아이콘" width={24} height={24} />
+                            <a
+                                href={internalLink}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="block overflow-hidden text-ellipsis whitespace-nowrap max-w-full text-body text-custom_slate-800"
+                            >
+                                {internalLink}
+                            </a>
+                        </div>
+                        <button
+                            onClick={() => {
+                                setInternalLink('')
+                                onSetLinkButton?.(undefined)
+                            }}
+                            className="shrink-0  ml-2 cuesor-pointer"
                         >
-                            {internalLink}
-                        </a>
+                            <Image src="/todos/ic-delete.svg" alt="삭제" width={24} height={24} />
+                        </button>
                     </div>
-                    <button
-                        onClick={() => {
-                            setInternalLink('')
-                            onSetLinkButton?.(undefined)
-                        }}
-                        className="shrink-0 ml-2 cuesor-pointer"
-                    >
-                        <Image src="/todos/ic-delete.svg" alt="삭제" width={24} height={24} />
-                    </button>
-                </div>
-            )}
-
-            <div className="w-full mt-2 text-body text-custom_slate-700">
+                )}
+            </div>
+            <div className={clsx(internalLink ? 'mt-16' : 'mt-5', 'w-full text-body text-custom_slate-700')}>
                 <div className="max-h-56 overflow-y-auto rounded">
                     <EditorContent editor={editorInstance} className="max-w-full" />
                 </div>
             </div>
-
-            <Toolbar editorInstance={editorInstance} linkButton={linkButton} onSetLinkButton={onSetLinkButton} />
         </div>
     )
 }
