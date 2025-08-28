@@ -48,7 +48,7 @@ const SidebarProfile = () => {
     }
 
     return (
-        <div className="flex flex-col w-full h-auto gap-5 mb-10 justify-between items-center border-t-1 border-custom_slate-300 py-5">
+        <div className=" flex flex-col w-full h-auto gap-5 mb-2 justify-between items-center border-t-1 border-custom_slate-300 py-2">
             <div className="flex w-full h-auto gap-3  justify-between items-center">
                 <Image
                     src={'/sidebar/profile.svg'}
@@ -59,8 +59,8 @@ const SidebarProfile = () => {
                 />
                 <div className="w-full h-auto mobile:flex mobile: justify-between mobile:items-end">
                     <div className="flex flex-col">
-                        <p className="text-sm font-medium overflow-x-hidden w-full">{userData?.name}</p>
-                        <p className="text-sm font-medium overflow-x-hidden w-full">{userData?.email}</p>
+                        <p className="text-sm font-medium overflow-x-hidden w-full truncate">{userData?.name}</p>
+                        <p className="text-sm font-medium overflow-x-hidden w-full truncate">{userData?.email}</p>
                     </div>
                 </div>
             </div>
