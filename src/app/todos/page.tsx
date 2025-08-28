@@ -12,14 +12,13 @@ import {useCustomMutation} from '@/hooks/use-custom-mutation'
 import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
 import {useModal} from '@/hooks/use-modal'
 import {del, get, patch} from '@/lib/common-api'
+import {todos as queryTodo} from '@/lib/query-keys'
 
 import Filter from './components/filter'
 import TodoItem from '../../components/common/todo-item'
 
 import type {InfiniteScrollOptions} from '@/types/infinite-scroll'
-import type {TodoListDetailResponse, TodoResponse} from '@/types/todos'
-
-type FilterValue = 'ALL' | 'TODO' | 'DONE'
+import type {FilterValue, TodoListDetailResponse, TodoResponse} from '@/types/todos'
 
 const Page = () => {
     const queryClient = useQueryClient()
@@ -63,7 +62,7 @@ const Page = () => {
         ref,
         hasMore,
     } = useInfiniteScrollQuery({
-        queryKey: ['todos', selectedFilter],
+        queryKey: queryTodo.list(selectedFilter).queryKey,
         fetchFn: (cursor) => getTodosList(cursor),
     } as InfiniteScrollOptions<TodoResponse>)
 
@@ -88,7 +87,7 @@ const Page = () => {
                 return typedError.message || '할일 수정 중 오류가 발생했습니다.'
             },
             onSuccess: () => {
-                queryClient.invalidateQueries({queryKey: ['todos']})
+                queryClient.invalidateQueries({queryKey: queryTodo.all()})
             },
         },
     )
@@ -113,7 +112,7 @@ const Page = () => {
                 return typedError.message || '할일 수정 중 오류가 발생했습니다.'
             },
             onSuccess: () => {
-                queryClient.invalidateQueries({queryKey: ['todos']})
+                queryClient.invalidateQueries({queryKey: queryTodo.all()})
             },
         },
     )

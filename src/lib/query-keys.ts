@@ -1,12 +1,17 @@
-import {goalDataApi, goalDeleteApi, goalListApi, goalUpdateApi} from './goals/api'
-import {noteListApi} from './notes/api'
-import {todoDeleteApi, todoUpdateApi} from './todos/api'
+import {goalDataApi, goalDeleteApi, goalListApi, goalPrograssApi, goalUpdateApi} from './goals/api'
+import {noteDetailApi, noteListApi} from './notes/api'
+import {todoDataApi, todoDeleteApi, todoUpdateApi} from './todos/api'
+
+import type {FilterValue} from '@/types/todos'
+
+// 회원
+export const users = {
+    user: () => ['userData'] as const,
+}
 
 // 목표
 export const goals = {
-    all: () => ({
-        queryKey: ['goal'] as const,
-    }),
+    all: () => ['goal'] as const,
     list: () => ({
         queryKey: ['goals'] as const,
         queryFn: async () => await goalListApi(),
@@ -14,6 +19,13 @@ export const goals = {
     detail: (goalId: string) => ({
         queryKey: ['goal', goalId] as const,
         queryFn: async () => await goalDataApi(goalId),
+    }),
+    prograss: (goalId: number) => ({
+        queryKey: ['goal', goalId, 'progress'] as const,
+        queryFn: async () => await goalPrograssApi(Number(goalId)),
+    }),
+    allPrograss: () => ({
+        queryKey: ['allProgress'] as const,
     }),
     update: (goalId: string, goalTitle: string) => ({
         queryFn: async () => await goalUpdateApi(goalId, goalTitle),
@@ -25,15 +37,17 @@ export const goals = {
 
 // 할일
 export const todos = {
-    all: () => ({
-        queryKey: ['todos'] as const,
+    all: () => ['todos'] as const,
+    list: (selectedFilter: FilterValue) => ({
+        queryKey: ['todos', selectedFilter] as const,
     }),
-    todosDone: () => ({
-        queryKey: ['todos', true] as const,
+    detail: (todoId: number) => ({
+        queryKey: ['todos', todoId] as const,
+        queryFn: async () => await todoDataApi(todoId),
     }),
-    todosNotDone: () => ({
-        queryKey: ['todos', false] as const,
-    }),
+    todosDone: () => ['todos', true] as const,
+    todosNotDone: () => ['todos', false] as const,
+    newTodo: () => ['newTodo'] as const,
     update: () => ({
         queryFn: async ({todoId, newDone}: {todoId: number; newDone: boolean}) => todoUpdateApi(todoId, newDone),
     }),
@@ -44,11 +58,14 @@ export const todos = {
 
 // 노트
 export const notes = {
-    all: () => ({
-        queryKey: ['notes'] as const,
-    }),
+    all: () => ['notes'] as const,
     list: (goalId: string) => ({
         queryKey: ['notes', goalId] as const,
         queryFn: (cursor?: number) => noteListApi(goalId ?? undefined, cursor),
     }),
+    detail: (noteId: number) => ({
+        queryKey: ['noteDetail', noteId] as const,
+        queryFn: async () => noteDetailApi(noteId),
+    }),
+    newNotes: () => ['newNotes'] as const,
 }

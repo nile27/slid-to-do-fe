@@ -4,6 +4,7 @@ import React from 'react'
 
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {get} from '@/lib/common-api'
+import {notes, todos} from '@/lib/query-keys'
 
 import FocusTimer from './focus-timer'
 import NewAddTodo from './new-addtodo'
@@ -56,7 +57,7 @@ const getNotesData = async () => {
 }
 
 const Header = () => {
-    const {data: todoData} = useCustomQuery<TodoPage>(['newTodo'], async () => getGoalsData(), {
+    const {data: todoData} = useCustomQuery<TodoPage>(todos.newTodo(), async () => getGoalsData(), {
         select: (data: TodoPage): TodoPage => ({
             data: data.data
                 .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -65,7 +66,7 @@ const Header = () => {
         }),
     })
 
-    const {data: noteData} = useCustomQuery<NotePage>(['newNotes'], async () => getNotesData(), {
+    const {data: noteData} = useCustomQuery<NotePage>(notes.newNotes(), async () => getNotesData(), {
         select: (data: NotePage): NotePage => ({
             data: data.data
                 .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())

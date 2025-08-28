@@ -6,6 +6,7 @@ import React, {useState} from 'react'
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
 import {get} from '@/lib/common-api'
+import {goals} from '@/lib/query-keys'
 
 import GoalTitleHeader from './goal-title-header'
 import ProgressBar from './todo-progress'
@@ -50,7 +51,7 @@ const GoalTodoContainer = ({isDashboard = true}: {isDashboard?: boolean}) => {
         }
     }
 
-    const {data} = useCustomQuery<{progress: number}>(['allProgress'], getProgressData, {})
+    const {data} = useCustomQuery<{progress: number}>(goals.allPrograss().queryKey, getProgressData, {})
 
     const {
         data: fetchGoals,
@@ -58,7 +59,7 @@ const GoalTodoContainer = ({isDashboard = true}: {isDashboard?: boolean}) => {
         isLoading: loadingGoals,
         hasMore: hasMoreGoals,
     } = useInfiniteScrollQuery<GoalResponse>({
-        queryKey: ['myGoals'],
+        queryKey: goals.all(),
         fetchFn: getGoalsData(),
     })
 

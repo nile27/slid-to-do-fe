@@ -12,6 +12,7 @@ import {useCustomMutation} from '@/hooks/use-custom-mutation'
 import useModal from '@/hooks/use-modal'
 import useToast from '@/hooks/use-toast'
 import {noteDeleteApi} from '@/lib/notes/api'
+import {notes} from '@/lib/query-keys'
 
 import TwoButtonModal from '../common/modal/two-buttom-modal'
 
@@ -36,7 +37,7 @@ const NotesSelect: React.FC<{noteId: number}> = ({noteId}) => {
 
         onSuccess: () => {
             /**삭제 성공 후 'notes' 쿼리 무효화 → 자동 리페치*/
-            queryClient.invalidateQueries({queryKey: ['notes']})
+            queryClient.invalidateQueries({queryKey: notes.all()})
             showToast('삭제가 완료되었습니다')
         },
     })

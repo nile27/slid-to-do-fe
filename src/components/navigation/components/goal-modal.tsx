@@ -10,6 +10,7 @@ import InputStyle from '@/components/style/input-style'
 import {useCustomMutation} from '@/hooks/use-custom-mutation'
 import useToast from '@/hooks/use-toast'
 import {post} from '@/lib/common-api'
+import {goals} from '@/lib/query-keys'
 import {useModalStore} from '@/store/use-modal-store'
 
 const GoalModal = () => {
@@ -33,9 +34,7 @@ const GoalModal = () => {
             errorDisplayType: 'none',
             onSuccess: () => {
                 showToast('목표가 생성되었습니다.')
-                clientQuery.invalidateQueries({queryKey: ['goals']})
-                clientQuery.invalidateQueries({queryKey: ['myGoals']})
-                clientQuery.invalidateQueries({queryKey: ['navMygoals']})
+                clientQuery.invalidateQueries({queryKey: goals.all()})
 
                 clearModal()
             },

@@ -82,7 +82,7 @@ const GoalsPage = () => {
                 return typedError.message || '알 수 없는 오류가 발생했습니다.'
             },
             onSuccess: () => {
-                queryClient.invalidateQueries({queryKey: goals.all().queryKey})
+                queryClient.invalidateQueries({queryKey: goals.all()})
                 showToast('수정이 완료되었습니다.')
             },
         },
@@ -175,7 +175,7 @@ const GoalsPage = () => {
         isError: doneIsError,
         error: doneError,
     } = useInfiniteScrollQuery<TodoResponse>({
-        queryKey: todos.todosDone().queryKey,
+        queryKey: todos.todosDone(),
         fetchFn: GetTodoList(true),
     })
 
@@ -188,7 +188,7 @@ const GoalsPage = () => {
         isError: notDoneIsError,
         error: notDoneError,
     } = useInfiniteScrollQuery<TodoResponse>({
-        queryKey: todos.todosNotDone().queryKey,
+        queryKey: todos.todosNotDone(),
         fetchFn: GetTodoList(false),
     })
 
@@ -208,8 +208,8 @@ const GoalsPage = () => {
             return typedError.message || '할 일 변경 중 오류가 발생했습니다.'
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: todos.all().queryKey})
-            queryClient.invalidateQueries({queryKey: goals.all().queryKey})
+            queryClient.invalidateQueries({queryKey: todos.all()})
+            queryClient.invalidateQueries({queryKey: goals.all()})
         },
     })
 
@@ -226,8 +226,8 @@ const GoalsPage = () => {
             return typedError.message || '할 일 삭제 중 오류가 발생했습니다.'
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: todos.all().queryKey})
-            queryClient.invalidateQueries({queryKey: goals.all().queryKey})
+            queryClient.invalidateQueries({queryKey: todos.all()})
+            queryClient.invalidateQueries({queryKey: goals.all()})
         },
     })
     const handleTodoDelete = (todoId: number) => {

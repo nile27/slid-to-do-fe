@@ -12,7 +12,8 @@ import {useCustomMutation} from '@/hooks/use-custom-mutation'
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import useModal from '@/hooks/use-modal'
 import useToast from '@/hooks/use-toast'
-import {noteDeleteApi, noteDetailApi} from '@/lib/notes/api'
+import {noteDeleteApi} from '@/lib/notes/api'
+import {notes, todos} from '@/lib/query-keys'
 import {useModalStore} from '@/store/use-modal-store'
 
 import LoadingSpinner from '../loading-spinner'
@@ -25,15 +26,19 @@ const SideModal = ({noteId}: {noteId: number}) => {
     const queryClient = useQueryClient()
     const {showToast} = useToast()
 
-    const {data, isLoading} = useCustomQuery<NoteItemResponse>(['noteDetail', noteId], () => noteDetailApi(noteId), {
-        errorDisplayType: 'toast',
-        mapErrorMessage: (error_) => {
-            if (axios.isAxiosError(error_)) {
-                return error_.response?.data.message || '서버 오류가 발생했습니다.'
-            }
-            return '할 일 상세 정보를 불러오는 데 실패했습니다.'
+    const {data, isLoading} = useCustomQuery<NoteItemResponse>(
+        notes.detail(noteId).queryKey,
+        notes.detail(noteId).queryFn,
+        {
+            errorDisplayType: 'toast',
+            mapErrorMessage: (error_) => {
+                if (axios.isAxiosError(error_)) {
+                    return error_.response?.data.message || '서버 오류가 발생했습니다.'
+                }
+                return '할 일 상세 정보를 불러오는 데 실패했습니다.'
+            },
         },
-    })
+    )
 
     const {clearModal} = useModalStore()
 
@@ -76,8 +81,8 @@ const SideModal = ({noteId}: {noteId: number}) => {
         },
 
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['notes']})
-            queryClient.invalidateQueries({queryKey: ['todos']})
+            queryClient.invalidateQueries({queryKey: notes.all()})
+            queryClient.invalidateQueries({queryKey: todos.all()})
             showToast('삭제가 완료되었습니다')
         },
     })
