@@ -3,80 +3,48 @@
 import React from 'react'
 
 import {useCustomQuery} from '@/hooks/use-custom-query'
-import {get} from '@/lib/common-api'
+import {notes, todos} from '@/lib/query-keys'
 
 import FocusTimer from './focus-timer'
 import NewAddTodo from './new-addtodo'
 
-import type {NoteCommon} from '@/types/notes'
-import type {TodoResponse} from '@/types/todos'
-
-interface TodoPage {
-    data: TodoResponse[]
-    nextCursor?: number
-}
-
-interface NotePage {
-    data: NoteCommon[]
-    nextCursor?: number
-}
-
-const getGoalsData = async () => {
-    try {
-        const response = await get<{todos: TodoResponse[]}>({
-            endpoint: `todos`,
-        })
-
-        return {
-            data: response.data.todos,
-        }
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            throw error
-        }
-        throw new Error(String(error))
-    }
-}
-
-const getNotesData = async () => {
-    try {
-        const response = await get<{notes: NoteCommon[]}>({
-            endpoint: `notes`,
-        })
-
-        return {
-            data: response.data.notes,
-        }
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            throw error
-        }
-        throw new Error(String(error))
-    }
-}
+import type {NoteListResponse} from '@/types/notes'
+import type {TodoListDetailResponse} from '@/types/todos'
 
 const Header = () => {
-    const {data: todoData} = useCustomQuery<TodoPage>(['newTodo'], async () => getGoalsData(), {
-        select: (data: TodoPage): TodoPage => ({
-            data: data.data
-                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-                .filter((item) => !item.done)
-                .slice(0, 5),
-        }),
-    })
+    const {data: todoData, isLoading: todoLoading} = useCustomQuery<TodoListDetailResponse>(
+        todos.newTodo().queryKey,
+        todos.newTodo().queryFn,
+        {
+            select: (data: TodoListDetailResponse): TodoListDetailResponse => ({
+                totalCount: data.todos.length,
+                nextCursor: data.nextCursor,
+                todos: data.todos
+                    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                    .filter((item) => !item.done)
+                    .slice(0, 5),
+            }),
+        },
+    )
 
-    const {data: noteData} = useCustomQuery<NotePage>(['newNotes'], async () => getNotesData(), {
-        select: (data: NotePage): NotePage => ({
-            data: data.data
-                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-                .slice(0, 5),
-        }),
-    })
+    const {data: noteData, isLoading: noteLoding} = useCustomQuery<NoteListResponse>(
+        notes.newNotes().queryKey,
+        notes.newNotes().queryFn,
+        {
+            select: (data: NoteListResponse): NoteListResponse => ({
+                totalCount: data.notes.length,
+                nextCursor: data.nextCursor,
+                notes: data.notes
+                    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                    .slice(0, 5),
+            }),
+        },
+    )
 
     return (
         <header className="w-full  h-auto min-w-[200px]   flex-col mb-4  flex justify-start items-start gap-4">
-            <NewAddTodo data={todoData?.data} subject="todo" />
-            <NewAddTodo data={noteData?.data} subject="note" />
+            <NewAddTodo data={todoData?.todos} subject="todo" isLoading={todoLoading} />
+            <NewAddTodo data={noteData?.notes} subject="note" isLoading={noteLoding} />
             <FocusTimer />
         </header>
     )

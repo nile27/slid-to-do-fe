@@ -8,20 +8,15 @@ import axios from 'axios'
 
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import useToast from '@/hooks/use-toast'
-import {get} from '@/lib/common-api'
+import {users} from '@/lib/query-keys'
 
 import type {UserType} from '@/types/user'
-
-const getProfile = async (): Promise<UserType> => {
-    const response = await get<UserType>({endpoint: `user`})
-    return response.data
-}
 
 // 로고 및 유저 정보 Component
 const SidebarProfile = () => {
     const router = useRouter()
     const {showToast} = useToast()
-    const {data: userData} = useCustomQuery<UserType>(['userData'], async () => getProfile(), {
+    const {data: userData} = useCustomQuery<UserType>(users.user().queryKey, users.user().queryFn, {
         errorDisplayType: 'toast',
         mapErrorMessage: (error) => {
             const typedError = error as {message?: string; response?: {data?: {message?: string}}}
@@ -47,7 +42,7 @@ const SidebarProfile = () => {
     }
 
     return (
-        <div className="flex flex-col w-full h-auto gap-5 mb-10 justify-between items-center border-t-1 border-custom_slate-300 py-5">
+        <div className=" flex flex-col w-full h-auto gap-5 mb-2 justify-between items-center border-t-1 border-custom_slate-300 py-2">
             <div className="flex w-full h-auto gap-3  justify-between items-center">
                 <Image
                     src={'/sidebar/profile.svg'}
@@ -58,8 +53,8 @@ const SidebarProfile = () => {
                 />
                 <div className="w-full h-auto mobile:flex mobile: justify-between mobile:items-end">
                     <div className="flex flex-col">
-                        <p className="text-sm font-medium overflow-x-hidden w-full">{userData?.name}</p>
-                        <p className="text-sm font-medium overflow-x-hidden w-full">{userData?.email}</p>
+                        <p className="text-sm font-medium overflow-x-hidden w-full truncate">{userData?.name}</p>
+                        <p className="text-sm font-medium overflow-x-hidden w-full truncate">{userData?.email}</p>
                     </div>
                 </div>
             </div>

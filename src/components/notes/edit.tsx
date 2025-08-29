@@ -10,7 +10,7 @@ import {useCustomMutation} from '@/hooks/use-custom-mutation'
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {useIsNoteChanged} from '@/hooks/use-is-note-changed'
 import useToast from '@/hooks/use-toast'
-import {noteDetailApi, noteEditApi} from '@/lib/notes/api'
+import {notes} from '@/lib/query-keys'
 import {type NoteItemResponse} from '@/types/notes'
 
 import LoadingSpinner from '../common/loading-spinner'
@@ -31,14 +31,18 @@ const NoteEditCompo = ({noteId}: {noteId: string}) => {
     const router = useRouter()
 
     /** 노트 단일 조회 통신 */
-    const {data} = useCustomQuery<NoteItemResponse>(['noteDetail', noteId], () => noteDetailApi(Number(noteId)), {
-        enabled: !!noteId,
-        errorDisplayType: 'toast',
-        mapErrorMessage: (error) => {
-            const apiError = error as ApiError
-            return apiError.message || '노트 정보를 불러오는 데 실패했습니다.'
+    const {data} = useCustomQuery<NoteItemResponse>(
+        notes.detail(Number(noteId)).queryKey,
+        notes.detail(Number(noteId)).queryFn,
+        {
+            enabled: !!noteId,
+            errorDisplayType: 'toast',
+            mapErrorMessage: (error) => {
+                const apiError = error as ApiError
+                return apiError.message || '노트 정보를 불러오는 데 실패했습니다.'
+            },
         },
-    })
+    )
 
     const [linkUrl, setLinkUrl] = useState<string | undefined>(data?.linkUrl)
 
@@ -87,10 +91,7 @@ const NoteEditCompo = ({noteId}: {noteId: string}) => {
 
     /** 노트 수정 통신*/
     const {mutate: editNote} = useCustomMutation<NoteItemResponse, Error, void>(
-        async () => {
-            return await noteEditApi(Number(noteId), payload)
-        },
-
+        notes.EditNotes(Number(noteId), payload).queryFn,
         {
             errorDisplayType: 'toast',
             mapErrorMessage: (error: Error) => {
@@ -102,7 +103,7 @@ const NoteEditCompo = ({noteId}: {noteId: string}) => {
             onSuccess: () => {
                 showToast('수정이 완료되었습니다!')
                 router.push(`/notes`)
-                queryClient.invalidateQueries({queryKey: ['noteDetail', noteId]})
+                queryClient.invalidateQueries({queryKey: notes.detail(Number(noteId)).queryKey})
             },
         },
     )
