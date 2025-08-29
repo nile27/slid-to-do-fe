@@ -11,6 +11,8 @@ import type {
 } from '@/types/api'
 import type {AxiosRequestConfig} from 'axios'
 
+import {useRouter} from 'next/router'
+
 /** 사용법
 import { get, post, patch, del } from '@/lib/api'
 
@@ -43,6 +45,14 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
+        if (error.response?.status === 498) {
+            if (typeof globalThis !== 'undefined') {
+                globalThis.location.href = '/login'
+            } else {
+            }
+            return Promise.reject(error)
+        }
+
         if (error.response.status === 401 && !error.config._retry) {
             error.config._retry = true
             try {
@@ -55,10 +65,10 @@ axiosInstance.interceptors.response.use(
                 )
                 return axiosInstance(error.config)
             } catch (refreshError) {
-                if (typeof globalThis !== 'undefined') {
+                if (axios.isAxiosError(refreshError) && refreshError.response?.status === 498) {
                     globalThis.location.href = '/login'
                 }
-                return refreshError
+                return Promise.reject(refreshError)
             }
         }
         throw error
