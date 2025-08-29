@@ -1,6 +1,13 @@
 import {createLowlight} from 'lowlight'
 
+import type {LanguageFn} from 'highlight.js'
+
 export const lowlight = createLowlight()
+
+export interface HLJSLangModule {
+    default: LanguageFn
+}
+export type HLJSLangLoader = () => Promise<HLJSLangModule>
 
 /** 언어 옵션 */
 export const LANG_OPTIONS = [
@@ -22,10 +29,9 @@ export const LANG_OPTIONS = [
 ] as const
 
 /** highlight.js 모듈명 매핑  */
-const HLJS_LOADER_MAP: Record<string, () => Promise<any>> = {
+const HLJS_LOADER_MAP:Record<string,HLJSLangLoader> = {
     javascript: () => import('highlight.js/lib/languages/javascript'),
     typescript: () => import('highlight.js/lib/languages/typescript'),
-
     jsx: () => import('highlight.js/lib/languages/javascript'),
     tsx: () => import('highlight.js/lib/languages/typescript'),
     json: () => import('highlight.js/lib/languages/json'),
@@ -38,7 +44,7 @@ const HLJS_LOADER_MAP: Record<string, () => Promise<any>> = {
     yaml: () => import('highlight.js/lib/languages/yaml'),
     diff: () => import('highlight.js/lib/languages/diff'),
     python: () => import('highlight.js/lib/languages/python'),
-}
+} satisfies Record<string, HLJSLangLoader>
 
 export const dynamicRegister = async (lang: string) => {
     if (!lang) return
@@ -47,8 +53,8 @@ export const dynamicRegister = async (lang: string) => {
     const load = HLJS_LOADER_MAP[lang]
     if (!load) return
 
-    const mod = await load()
-    lowlight.register(lang, mod.default)
+    const module_ = await load()
+    lowlight.register(lang, module_.default)
 }
 
 /** 초기에 자주 쓰는 언어만 예열 */

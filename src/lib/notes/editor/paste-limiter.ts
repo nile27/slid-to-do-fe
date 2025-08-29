@@ -1,6 +1,7 @@
-import type { PasteLimiterOptions } from '@/types/notes'
 import {Extension} from '@tiptap/core'
 import {Plugin} from 'prosemirror-state'
+
+import type {PasteLimiterOptions} from '@/types/editor'
 
 export const PasteLimiter = Extension.create<PasteLimiterOptions>({
     name: 'pasteLimiter',

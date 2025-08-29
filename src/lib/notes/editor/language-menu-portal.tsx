@@ -1,11 +1,19 @@
 'use client'
 
-import {createPortal} from 'react-dom'
 import {useEffect, useLayoutEffect, useRef, useState} from 'react'
-import type {LanguageMenuPortalProps} from '@/types/notes'
+import {createPortal} from 'react-dom'
 
-const LanguageMenuPortal = ({anchorRef, isOpen, currentLang, options, onSelect, onClose}: LanguageMenuPortalProps) => {
-    const portalRef = useRef<HTMLDivElement>(null)
+import type {LanguageMenuPortalProperty} from '@/types/editor'
+
+const LanguageMenuPortal = ({
+    anchorRef,
+    isOpen,
+    currentLang,
+    options,
+    onSelect,
+    onClose,
+}: LanguageMenuPortalProperty) => {
+    const portalReference = useRef<HTMLDivElement>(null)
     const [style, setStyle] = useState({top: 0, left: 0, width: 200})
 
     useLayoutEffect(() => {
@@ -20,8 +28,8 @@ const LanguageMenuPortal = ({anchorRef, isOpen, currentLang, options, onSelect, 
     }, [anchorRef, isOpen])
 
     useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (!portalRef.current?.contains(e.target as Node)) {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (!portalReference.current?.contains(event.target as Node)) {
                 onClose()
             }
         }
@@ -31,21 +39,21 @@ const LanguageMenuPortal = ({anchorRef, isOpen, currentLang, options, onSelect, 
         }
     }, [isOpen, onClose])
 
-    if (!isOpen) return null
+    if (!isOpen) return undefined
 
     return createPortal(
         <div
-            ref={portalRef}
-            onMouseDown={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
+            ref={portalReference}
+            onMouseDown={(event) => {
+                event.preventDefault()
+                event.stopPropagation()
             }}
             style={{
                 position: 'absolute',
                 top: style.top,
                 left: style.left,
                 zIndex: 9999,
-                // width: style.width, 
+                // width: style.width,
             }}
             className="max-w-20 max-h-64 overflow-y-auto bg-white rounded-xl shadow-lg"
         >
@@ -55,9 +63,9 @@ const LanguageMenuPortal = ({anchorRef, isOpen, currentLang, options, onSelect, 
                     className={`w-full text-left px-3 py-2 text-xs hover:bg-gray-100  ${
                         currentLang === opt.value ? 'font-semibold' : ''
                     }`}
-                    onMouseDown={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
+                    onMouseDown={(event) => {
+                        event.preventDefault()
+                        event.stopPropagation()
                     }}
                     onClick={() => {
                         // onSelect 내부에서 editor.chain().focus().updateAttributes(...).run() 하도록!

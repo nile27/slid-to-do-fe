@@ -1,6 +1,7 @@
 /** 끝이 코드블록이면 아래 문단 자동 생성 + 빈영역 클릭 가능하게*/
-import type {EditorView} from '@tiptap/pm/view'
 import {TextSelection} from '@tiptap/pm/state'
+
+import type {EditorView} from '@tiptap/pm/view'
 
 export const ensureTrailingParagraph = (view: EditorView) => {
     const {state, dispatch} = view

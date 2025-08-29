@@ -1,6 +1,6 @@
-import type { MaxLinesOptions } from '@/types/notes'
 import {Extension} from '@tiptap/core'
 
+import type {MaxLinesOptions} from '@/types/editor'
 
 export const MaxLines = Extension.create<MaxLinesOptions>({
     name: 'maxLines',
