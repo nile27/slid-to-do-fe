@@ -6,7 +6,7 @@ import axios from 'axios'
 import clsx from 'clsx'
 
 import {useCustomQuery} from '@/hooks/use-custom-query'
-import {goalPrograssApi} from '@/lib/goals/api'
+import {goals} from '@/lib/query-keys'
 
 import LoadingSpinner from '../common/loading-spinner'
 import {dateformat} from '../style/utils'
@@ -16,8 +16,8 @@ import type {GoalProgress} from '@/types/goals'
 const Progress = ({goalId, title, createdAt}: {goalId: number; title: string; createdAt: string}) => {
     const router = useRouter()
     const {data, isLoading} = useCustomQuery<GoalProgress>(
-        ['goal', goalId, 'progress'],
-        async () => goalPrograssApi(Number(goalId)),
+        goals.prograss(goalId).queryKey,
+        goals.prograss(goalId).queryFn,
         {
             errorDisplayType: 'toast',
             mapErrorMessage: (error) => {

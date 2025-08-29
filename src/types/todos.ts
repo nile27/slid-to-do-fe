@@ -1,5 +1,7 @@
 import type {Goal} from './goals'
 
+export type FilterValue = 'ALL' | 'TODO' | 'DONE'
+
 export interface Todo {
     id: number
     title: string

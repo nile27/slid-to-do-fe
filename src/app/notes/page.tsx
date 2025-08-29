@@ -7,9 +7,7 @@ import clsx from 'clsx'
 import LoadingSpinner from '@/components/common/loading-spinner'
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
-import {get} from '@/lib/common-api'
-import {goalListApi} from '@/lib/goals/api'
-import {noteListApi} from '@/lib/notes/api'
+import {goals, notes as note} from '@/lib/query-keys'
 
 import {NoteList} from '../../components/notes/list'
 
@@ -20,7 +18,7 @@ import type {NoteCommon} from '@/types/notes'
 
 const Page = () => {
     const parameters = useSearchParams()
-    const goalId = parameters.get('goalId')
+    const goalId = parameters.get('goalId') as string
 
     const {
         data: notes,
@@ -28,31 +26,26 @@ const Page = () => {
         ref,
         hasMore,
     } = useInfiniteScrollQuery({
-        queryKey: ['notes', goalId],
-        fetchFn: (cursor) => noteListApi(goalId ?? undefined, cursor),
+        queryKey: note.list(goalId).queryKey,
+        fetchFn: note.list(goalId).queryFn,
     } as InfiniteScrollOptions<NoteCommon>)
 
-    const fetchGetGoalTitle = async (): Promise<{title: string}> => {
-        const fallbackEndpoint = `goals/${goalId}`
-        const fallbackResult = await get<{title: string}>({
-            endpoint: fallbackEndpoint,
-        })
-
-        return fallbackResult.data
-    }
-
-    const {data: goalData, isLoading: isGoalLoading} = useCustomQuery(['goalTitle', goalId], fetchGetGoalTitle, {
-        enabled: !!goalId && notes.length === 0,
-        errorDisplayType: 'toast',
-        mapErrorMessage: (error) => {
-            const apiError = error as ApiError
-            return apiError.message || '알 수 없는 오류가 발생했습니다.'
+    const {data: goalData, isLoading: isGoalLoading} = useCustomQuery(
+        goals.detail(goalId).queryKey,
+        goals.detail(goalId).queryFn,
+        {
+            enabled: !!goalId && notes.length === 0,
+            errorDisplayType: 'toast',
+            mapErrorMessage: (error) => {
+                const apiError = error as ApiError
+                return apiError.message || '알 수 없는 오류가 발생했습니다.'
+            },
         },
-    })
+    )
 
     // goal_list
     const router = useRouter()
-    const {data: goal_list} = useCustomQuery<GoalsListResponse>(['goals'], goalListApi, {
+    const {data: goal_list} = useCustomQuery<GoalsListResponse>(goals.list().queryKey, goals.list().queryFn, {
         errorDisplayType: 'toast',
         mapErrorMessage: (error) => {
             const apiError = error as ApiError

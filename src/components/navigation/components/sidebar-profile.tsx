@@ -9,6 +9,7 @@ import axios from 'axios'
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import useToast from '@/hooks/use-toast'
 import {get} from '@/lib/common-api'
+import {users} from '@/lib/query-keys'
 
 import type {UserType} from '@/types/user'
 
@@ -21,7 +22,7 @@ const getProfile = async (): Promise<UserType> => {
 const SidebarProfile = () => {
     const router = useRouter()
     const {showToast} = useToast()
-    const {data: userData} = useCustomQuery<UserType>(['userData'], async () => getProfile(), {
+    const {data: userData} = useCustomQuery<UserType>(users.user(), async () => getProfile(), {
         errorDisplayType: 'toast',
         mapErrorMessage: (error) => {
             const typedError = error as {message?: string; response?: {data?: {message?: string}}}

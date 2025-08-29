@@ -6,11 +6,12 @@ import React from 'react'
 import ProgressBar from '@/components/goals/prograss-motion'
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {get} from '@/lib/common-api'
+import {goals} from '@/lib/query-keys'
 
 import type {GoalProgress} from '@/types/goals'
 
 const GoalTitleHeader = ({goalId, title, isDashboard}: {goalId: number; title: string; isDashboard: boolean}) => {
-    const {data: progressData} = useCustomQuery<number>(['todos', goalId, 'dashProgress'], async () => {
+    const {data: progressData} = useCustomQuery<number>(goals.prograss(goalId).queryKey, async () => {
         const response = await get<GoalProgress>({
             endpoint: `todos/progress?goalId=${goalId}`,
         })
