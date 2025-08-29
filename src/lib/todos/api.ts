@@ -1,6 +1,14 @@
 import {del, get, patch} from '@/lib/common-api'
 
-import type {Todo, TodoResponse} from '@/types/todos'
+import type {Todo, TodoListDetailResponse, TodoResponse} from '@/types/todos'
+
+// dashboard 최근 할일 목록
+export const NewTodoListApi = async (): Promise<TodoListDetailResponse> => {
+    const response = await get<TodoListDetailResponse>({
+        endpoint: `todos`,
+    })
+    return response.data
+}
 
 // 할일 API 호출 함수
 export const todoDataApi = async (todoId: number): Promise<Todo> => {

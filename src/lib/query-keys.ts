@@ -1,6 +1,6 @@
 import {goalDataApi, goalDeleteApi, goalListApi, goalPrograssApi, goalUpdateApi} from './goals/api'
-import {noteDetailApi, noteListApi} from './notes/api'
-import {todoDataApi, todoDeleteApi, todoUpdateApi} from './todos/api'
+import {NewNoteListApi, noteDetailApi, noteListApi} from './notes/api'
+import {NewTodoListApi, todoDataApi, todoDeleteApi, todoUpdateApi} from './todos/api'
 
 import type {FilterValue} from '@/types/todos'
 
@@ -47,7 +47,10 @@ export const todos = {
     }),
     todosDone: () => ['todos', true] as const,
     todosNotDone: () => ['todos', false] as const,
-    newTodo: () => ['newTodo'] as const,
+    newTodo: () => ({
+        queryKey: ['newTodo'] as const,
+        queryFn: async () => NewTodoListApi(),
+    }),
     update: () => ({
         queryFn: async ({todoId, newDone}: {todoId: number; newDone: boolean}) => todoUpdateApi(todoId, newDone),
     }),
@@ -67,5 +70,8 @@ export const notes = {
         queryKey: ['noteDetail', noteId] as const,
         queryFn: async () => noteDetailApi(noteId),
     }),
-    newNotes: () => ['newNotes'] as const,
+    newNotes: () => ({
+        queryKey: ['newNotes'] as const,
+        queryFn: async () => NewNoteListApi(),
+    }),
 }
