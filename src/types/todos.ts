@@ -48,3 +48,10 @@ export interface PatchTodoRequest {
     linkUrl?: string
     fileUrl?: string
 }
+
+/**단일 목표 달성률 응답 */
+export interface TodoProgress {
+    progress: number
+    totalCount?: number
+    isDashboard: boolean
+}

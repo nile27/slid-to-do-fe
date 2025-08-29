@@ -8,21 +8,15 @@ import axios from 'axios'
 
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import useToast from '@/hooks/use-toast'
-import {get} from '@/lib/common-api'
 import {users} from '@/lib/query-keys'
 
 import type {UserType} from '@/types/user'
-
-const getProfile = async (): Promise<UserType> => {
-    const response = await get<UserType>({endpoint: `user`})
-    return response.data
-}
 
 // 로고 및 유저 정보 Component
 const SidebarProfile = () => {
     const router = useRouter()
     const {showToast} = useToast()
-    const {data: userData} = useCustomQuery<UserType>(users.user(), async () => getProfile(), {
+    const {data: userData} = useCustomQuery<UserType>(users.user().queryKey, users.user().queryFn, {
         errorDisplayType: 'toast',
         mapErrorMessage: (error) => {
             const typedError = error as {message?: string; response?: {data?: {message?: string}}}

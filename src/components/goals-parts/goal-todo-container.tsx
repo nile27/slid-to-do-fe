@@ -6,7 +6,7 @@ import React, {useState} from 'react'
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
 import {get} from '@/lib/common-api'
-import {goals} from '@/lib/query-keys'
+import {todos, goals} from '@/lib/query-keys'
 
 import GoalTitleHeader from './goal-title-header'
 import ProgressBar from './todo-progress'
@@ -15,16 +15,6 @@ import {GoalTitleHeaderSkeleton} from '../ui/skeleton/goals/goal-title-header-sk
 import {GoalsTodoContainerSkeleton} from '../ui/skeleton/goals/goals-todo-container-skeleton'
 
 import type {GoalResponse} from '@/types/goals'
-
-const getProgressData = async () => {
-    const response = await get<{progress: number}>({
-        endpoint: `todos/progress`,
-    })
-
-    return {
-        progress: response.data.progress,
-    }
-}
 
 const GoalTodoContainer = ({isDashboard = true}: {isDashboard?: boolean}) => {
     const [totalCount, setTotalCount] = useState(0)
@@ -51,7 +41,7 @@ const GoalTodoContainer = ({isDashboard = true}: {isDashboard?: boolean}) => {
         }
     }
 
-    const {data} = useCustomQuery<{progress: number}>(goals.allPrograss().queryKey, getProgressData, {})
+    const {data} = useCustomQuery<{progress: number}>(todos.allPrograss().queryKey, todos.allPrograss().queryFn, {})
 
     const {
         data: fetchGoals,

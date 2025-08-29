@@ -1,6 +1,6 @@
-import {del, get, patch} from '@/lib/common-api'
+import {del, get, patch, post} from '@/lib/common-api'
 
-import type {Goal, GoalProgress, GoalsAllListResponse, GoalsListResponse} from '@/types/goals'
+import type {Goal, GoalsAllListResponse, GoalsListResponse} from '@/types/goals'
 import type {TodoResponse} from '@/types/todos'
 
 // goal API 호출 함수
@@ -35,14 +35,6 @@ export const goalDeleteApi = async (goalId: string): Promise<void> => {
     })
 }
 
-// goal prograss API 함수
-export const goalPrograssApi = async (goalId: number): Promise<GoalProgress> => {
-    const response = await get<GoalProgress>({
-        endpoint: `todos/progress?goalId=${goalId}`,
-    })
-    return response.data
-}
-
 // 할일 추가, 수정에서 사용하는 goal list API 함수
 export const goalListApi = async (): Promise<GoalsListResponse> => {
     const endpoint = `goals?size=100&sortOrder=newest`
@@ -66,4 +58,12 @@ export const goalListPageApi = async (cursor: number | undefined): Promise<Goals
         nextCursor: response.data.nextCursor,
         totalCount: response.data.totalCount,
     }
+}
+
+// 네비게이션 목표 생성
+export const goalCreatApi = async (title: string) => {
+    return await post({
+        endpoint: `goals`,
+        data: {title},
+    })
 }

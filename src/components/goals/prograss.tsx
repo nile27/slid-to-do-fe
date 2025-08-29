@@ -6,18 +6,18 @@ import axios from 'axios'
 import clsx from 'clsx'
 
 import {useCustomQuery} from '@/hooks/use-custom-query'
-import {goals} from '@/lib/query-keys'
+import {todos} from '@/lib/query-keys'
 
 import LoadingSpinner from '../common/loading-spinner'
 import {dateformat} from '../style/utils'
 
-import type {GoalProgress} from '@/types/goals'
+import type {TodoProgress} from '@/types/todos'
 
 const Progress = ({goalId, title, createdAt}: {goalId: number; title: string; createdAt: string}) => {
     const router = useRouter()
-    const {data, isLoading} = useCustomQuery<GoalProgress>(
-        goals.prograss(goalId).queryKey,
-        goals.prograss(goalId).queryFn,
+    const {data, isLoading} = useCustomQuery<TodoProgress>(
+        todos.prograss(goalId).queryKey,
+        todos.prograss(goalId).queryFn,
         {
             errorDisplayType: 'toast',
             mapErrorMessage: (error) => {
