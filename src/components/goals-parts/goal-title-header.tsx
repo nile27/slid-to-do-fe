@@ -5,19 +5,15 @@ import React from 'react'
 
 import ProgressBar from '@/components/goals/prograss-motion'
 import {useCustomQuery} from '@/hooks/use-custom-query'
-import {get} from '@/lib/common-api'
-import {goals} from '@/lib/query-keys'
+import {todos} from '@/lib/query-keys'
 
-import type {GoalProgress} from '@/types/goals'
+import type {TodoProgress} from '@/types/todos'
 
 const GoalTitleHeader = ({goalId, title, isDashboard}: {goalId: number; title: string; isDashboard: boolean}) => {
-    const {data: progressData} = useCustomQuery<number>(goals.prograss(goalId).queryKey, async () => {
-        const response = await get<GoalProgress>({
-            endpoint: `todos/progress?goalId=${goalId}`,
-        })
-
-        return response.data.progress
-    })
+    const {data: progressData} = useCustomQuery<TodoProgress>(
+        todos.prograss(goalId).queryKey,
+        todos.prograss(goalId).queryFn,
+    )
 
     return (
         <div className="w-full h-auto p-4 border border-[#D4D5D5] rounded-lg bf-">
@@ -29,7 +25,7 @@ const GoalTitleHeader = ({goalId, title, isDashboard}: {goalId: number; title: s
                     {title}
                 </Link>
             </div>
-            <ProgressBar progress={progressData || 0} isDashboard={isDashboard} />
+            <ProgressBar progress={progressData?.progress || 0} isDashboard={isDashboard} />
         </div>
     )
 }

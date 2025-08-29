@@ -1,12 +1,17 @@
-import {goalDataApi, goalDeleteApi, goalListApi, goalPrograssApi, goalUpdateApi} from './goals/api'
-import {NewNoteListApi, noteDetailApi, noteListApi} from './notes/api'
-import {NewTodoListApi, todoDataApi, todoDeleteApi, todoUpdateApi} from './todos/api'
+import {goalDataApi, goalDeleteApi, goalListApi, goalUpdateApi} from './goals/api'
+import {NewNoteListApi, noteDetailApi, noteEditApi, noteListApi, noteRegApi} from './notes/api'
+import {NewTodoListApi, todoDataApi, todoDeleteApi, todoPrograssAll, todoPrograssApi, todoUpdateApi} from './todos/api'
+import {getProfile} from './users/api'
 
+import type {NoteDataProperty, NoteInsertProperty} from '@/types/notes'
 import type {FilterValue} from '@/types/todos'
 
 // 회원
 export const users = {
-    user: () => ['userData'] as const,
+    user: () => ({
+        queryKey: ['userData'] as const,
+        queryFn: async () => await getProfile(),
+    }),
 }
 
 // 목표
@@ -19,13 +24,6 @@ export const goals = {
     detail: (goalId: string) => ({
         queryKey: ['goal', goalId] as const,
         queryFn: async () => await goalDataApi(goalId),
-    }),
-    prograss: (goalId: number) => ({
-        queryKey: ['goal', goalId, 'progress'] as const,
-        queryFn: async () => await goalPrograssApi(Number(goalId)),
-    }),
-    allPrograss: () => ({
-        queryKey: ['allProgress'] as const,
     }),
     update: (goalId: string, goalTitle: string) => ({
         queryFn: async () => await goalUpdateApi(goalId, goalTitle),
@@ -45,8 +43,7 @@ export const todos = {
         queryKey: ['todos', todoId] as const,
         queryFn: async () => await todoDataApi(todoId),
     }),
-    todosDone: () => ['todos', true] as const,
-    todosNotDone: () => ['todos', false] as const,
+    toTodo: (done: boolean) => ['todos', done] as const,
     newTodo: () => ({
         queryKey: ['newTodo'] as const,
         queryFn: async () => NewTodoListApi(),
@@ -56,6 +53,14 @@ export const todos = {
     }),
     delete: () => ({
         queryFn: async (todoId: number) => todoDeleteApi(todoId),
+    }),
+    prograss: (goalId: number) => ({
+        queryKey: ['goal', goalId, 'progress'] as const,
+        queryFn: async () => await todoPrograssApi(Number(goalId)),
+    }),
+    allPrograss: () => ({
+        queryKey: ['allProgress'] as const,
+        queryFn: async () => todoPrograssAll(),
     }),
 }
 
@@ -73,5 +78,11 @@ export const notes = {
     newNotes: () => ({
         queryKey: ['newNotes'] as const,
         queryFn: async () => NewNoteListApi(),
+    }),
+    EditNotes: (noteId: number, payload: Omit<NoteDataProperty, 'id'>) => ({
+        queryFn: async () => noteEditApi(Number(noteId), payload),
+    }),
+    save: (payload: NoteInsertProperty) => ({
+        queryFn: () => noteRegApi(payload),
     }),
 }

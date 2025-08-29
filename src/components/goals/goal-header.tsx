@@ -10,11 +10,12 @@ import LoadingSpinner from '@/components/common/loading-spinner'
 import ButtonStyle from '@/components/style/button-style'
 import InputStyle from '@/components/style/input-style'
 import {useCustomQuery} from '@/hooks/use-custom-query'
-import {goals} from '@/lib/query-keys'
+import {todos} from '@/lib/query-keys'
 
 import ProgressBar from './prograss-motion'
 
-import type {Goal, GoalProgress} from '@/types/goals'
+import type {Goal} from '@/types/goals'
+import type {TodoProgress} from '@/types/todos'
 
 const GoalHeader = ({
     goal,
@@ -39,10 +40,11 @@ const GoalHeader = ({
 }) => {
     const [progress, setProgress] = useState<number>(0)
     const {goalId} = useParams()
+
     /** 목표 달성 API */
-    const {data: progressData, isLoading} = useCustomQuery<GoalProgress>(
-        goals.prograss(Number(goalId)).queryKey,
-        goals.prograss(Number(goalId)).queryFn,
+    const {data: progressData, isLoading} = useCustomQuery<TodoProgress>(
+        todos.prograss(Number(goalId)).queryKey,
+        todos.prograss(Number(goalId)).queryFn,
         {
             errorDisplayType: 'toast',
             mapErrorMessage: (error) => {

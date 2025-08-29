@@ -10,7 +10,6 @@ import NoteEditCompo from '@/components/notes/edit'
 import NoteWriteCompo from '@/components/notes/write'
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import useToast from '@/hooks/use-toast'
-import {goalDataApi} from '@/lib/goals/api'
 import {goals, todos} from '@/lib/query-keys'
 
 import type {Goal} from '@/types/goals'
@@ -39,10 +38,7 @@ const NoteWritePage = () => {
     // goal API 호출
     const {data: goalsData, isLoading: isLoadingGoals} = useCustomQuery<Goal>(
         goals.detail(String(goalId)).queryKey,
-        async () => {
-            if (!goalId) throw new Error('목표 없이 노트작성이 불가합니다.')
-            return goalDataApi(goalId)
-        },
+        goals.detail(String(goalId)).queryFn,
         {
             enabled: !!goalId,
             errorDisplayType: 'toast',

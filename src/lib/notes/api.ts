@@ -1,6 +1,6 @@
 import {post, get, del, patch} from '@/lib/common-api'
 
-import type {NoteCommon, NoteDataProperty, NoteItemResponse, NoteListResponse} from '@/types/notes'
+import type {NoteCommon, NoteDataProperty, NoteInsertProperty, NoteItemResponse, NoteListResponse} from '@/types/notes'
 
 // dashboard 최근 노트 목록
 export const NewNoteListApi = async (): Promise<NoteListResponse> => {
@@ -11,12 +11,7 @@ export const NewNoteListApi = async (): Promise<NoteListResponse> => {
 }
 
 // 노트 생성 API 호출 함수
-export const noteRegApi = async (payload: {
-    todoId: number
-    title: string
-    content: string
-    linkUrl?: string
-}): Promise<NoteCommon> => {
+export const noteRegApi = async (payload: NoteInsertProperty): Promise<NoteCommon> => {
     const response = await post<NoteCommon>({
         endpoint: `notes`,
         data: payload,

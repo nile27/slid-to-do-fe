@@ -10,7 +10,6 @@ import {useCustomMutation} from '@/hooks/use-custom-mutation'
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import {useIsNoteChanged} from '@/hooks/use-is-note-changed'
 import useToast from '@/hooks/use-toast'
-import {noteEditApi} from '@/lib/notes/api'
 import {notes} from '@/lib/query-keys'
 import {type NoteItemResponse} from '@/types/notes'
 
@@ -92,10 +91,7 @@ const NoteEditCompo = ({noteId}: {noteId: string}) => {
 
     /** 노트 수정 통신*/
     const {mutate: editNote} = useCustomMutation<NoteItemResponse, Error, void>(
-        async () => {
-            return await noteEditApi(Number(noteId), payload)
-        },
-
+        notes.EditNotes(Number(noteId), payload).queryFn,
         {
             errorDisplayType: 'toast',
             mapErrorMessage: (error: Error) => {

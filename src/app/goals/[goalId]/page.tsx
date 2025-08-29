@@ -17,8 +17,8 @@ import {useCustomQuery} from '@/hooks/use-custom-query'
 import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
 import useModal from '@/hooks/use-modal'
 import useToast from '@/hooks/use-toast'
-import {get} from '@/lib/common-api'
 import {goals, todos} from '@/lib/query-keys'
+import {TodoListApi} from '@/lib/todos/api'
 import {useModalStore} from '@/store/use-modal-store'
 
 import type {Goal} from '@/types/goals'
@@ -145,27 +145,6 @@ const GoalsPage = () => {
         },
     )
 
-    /** 할일 API 호출 */
-    const GetTodoList = (done: boolean) => {
-        return async (cursor: number | undefined) => {
-            let endpoint = `todos?goalId=${goalId}&done=${done}&size=10`
-            if (cursor !== undefined) {
-                endpoint += `&cursor=${cursor}`
-            }
-
-            const result = await get<{
-                todos: TodoResponse[]
-                nextCursor: number | undefined
-            }>({
-                endpoint,
-            })
-            return {
-                data: result.data.todos,
-                nextCursor: result.data.nextCursor,
-            }
-        }
-    }
-
     // 해야 할 일
     const {
         data: todosDone,
@@ -175,8 +154,8 @@ const GoalsPage = () => {
         isError: doneIsError,
         error: doneError,
     } = useInfiniteScrollQuery<TodoResponse>({
-        queryKey: todos.todosDone(),
-        fetchFn: GetTodoList(true),
+        queryKey: todos.toTodo(true),
+        fetchFn: TodoListApi(true, Number(goalId)),
     })
 
     // 한 일
@@ -188,8 +167,8 @@ const GoalsPage = () => {
         isError: notDoneIsError,
         error: notDoneError,
     } = useInfiniteScrollQuery<TodoResponse>({
-        queryKey: todos.todosNotDone(),
-        fetchFn: GetTodoList(false),
+        queryKey: todos.toTodo(false),
+        fetchFn: TodoListApi(false, Number(goalId)),
     })
 
     /**할일 추가 모달 */
