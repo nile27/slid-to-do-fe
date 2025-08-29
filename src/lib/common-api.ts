@@ -11,8 +11,6 @@ import type {
 } from '@/types/api'
 import type {AxiosRequestConfig} from 'axios'
 
-import {useRouter} from 'next/router'
-
 /** 사용법
 import { get, post, patch, del } from '@/lib/api'
 
@@ -48,9 +46,8 @@ axiosInstance.interceptors.response.use(
         if (error.response?.status === 498) {
             if (typeof globalThis !== 'undefined') {
                 globalThis.location.href = '/login'
-            } else {
             }
-            return Promise.reject(error)
+            return error
         }
 
         if (error.response.status === 401 && !error.config._retry) {
@@ -68,7 +65,7 @@ axiosInstance.interceptors.response.use(
                 if (axios.isAxiosError(refreshError) && refreshError.response?.status === 498) {
                     globalThis.location.href = '/login'
                 }
-                return Promise.reject(refreshError)
+                return refreshError
             }
         }
         throw error
