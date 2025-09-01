@@ -53,7 +53,6 @@ const LanguageMenuPortal = ({
                 top: style.top,
                 left: style.left,
                 zIndex: 9999,
-                // width: style.width,
             }}
             className="max-w-20 max-h-64 overflow-y-auto bg-white rounded-xl shadow-lg"
         >
