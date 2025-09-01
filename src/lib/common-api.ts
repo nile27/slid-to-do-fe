@@ -55,6 +55,9 @@ axiosInstance.interceptors.response.use(
                 )
                 return axiosInstance(error.config)
             } catch (refreshError) {
+                if (typeof globalThis !== 'undefined') {
+                    globalThis.location.href = '/login'
+                }
                 return refreshError
             }
         }
@@ -69,7 +72,7 @@ export const request = async <T>({method, endpoint, data, options}: RequestParam
             method,
             data,
             headers: options?.headers,
-            params: {endpoint: endpoint},
+            params: {endpoint},
         }
 
         const response = await axiosInstance.request<ApiPayload<T>>(config)

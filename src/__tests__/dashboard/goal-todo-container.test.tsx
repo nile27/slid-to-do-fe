@@ -3,7 +3,7 @@ import React from 'react'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {render, screen, waitFor} from '@testing-library/react'
 
-import GoalTodoContainer from '@/app/dashboard/components/body/goal-todo-container'
+import GoalTodoContainer from '@/components/goals-parts/goal-todo-container'
 import * as api from '@/lib/common-api'
 
 jest.mock('@/lib/common-api')
