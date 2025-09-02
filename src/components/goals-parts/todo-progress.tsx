@@ -37,7 +37,7 @@ const ProgressBar = ({progress, totalCount = 0, isDashboard}: TodoProgress) => {
                     className={`h-full ${isDashboard ? 'bg-custom_blue-400' : 'bg-custom_slate-800'}  origin-left rounded-r-full"`}
                 />
             </div>
-            <p className="w-full px-1 mt-2 text-gray-700 text-[12px]">전체 할 일 기준으로 보여지고 있습니다.</p>
+            <p className="w-full px-1 mt-2 text-gray-700 text-[12px]">*전체 달성률 기준</p>
         </div>
     )
 }
