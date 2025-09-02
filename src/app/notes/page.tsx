@@ -1,6 +1,8 @@
 'use client'
 
+import Image from 'next/image'
 import {useRouter, useSearchParams} from 'next/navigation'
+import {useEffect, useRef, useState} from 'react'
 
 import clsx from 'clsx'
 
@@ -19,6 +21,9 @@ import type {NoteCommon} from '@/types/notes'
 const Page = () => {
     const parameters = useSearchParams()
     const goalId = parameters.get('goalId') as string
+    const [selectGoals, setSelectGoals] = useState<boolean>(false)
+    const goalsReference = useRef<HTMLDivElement>(null)
+    const router = useRouter()
 
     const {
         data: notes,
@@ -44,7 +49,6 @@ const Page = () => {
     )
 
     // goal_list
-    const router = useRouter()
     const {data: goal_list} = useCustomQuery<GoalsListResponse>(goals.list().queryKey, goals.list().queryFn, {
         errorDisplayType: 'toast',
         mapErrorMessage: (error) => {
@@ -53,10 +57,32 @@ const Page = () => {
         },
     })
 
+    // selectBox
+    const handleSelect = (id: number) => {
+        setSelectGoals(false)
+        router.push(`notes?goalId=${id}`)
+    }
+
+    const selectedGoal = goal_list?.goals?.find((goal) => goal.id === Number(goalId)) || goalData // 현재 선택된 목표
+    const otherGoals = goal_list?.goals?.filter((goal) => goal.id !== Number(goalId)) || []
+
+    // 외부 클릭 감지
+    useEffect(() => {
+        const handleClickOutside = (event_: MouseEvent) => {
+            const t = event_.target as Node
+            if (goalsReference.current?.contains(t)) return
+            setSelectGoals(false)
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [])
+
     if (isLoading || isGoalLoading) {
         return <LoadingSpinner />
     }
-
     hasMore && !isLoading && notes.length > 0 && <div ref={ref} />
 
     return (
@@ -70,23 +96,49 @@ const Page = () => {
 
                 <div className={clsx('w-full  flex-1 flex flex-col', goalId ? 'mt-4' : 'mt-0')}>
                     {goalId && (
-                        <select
-                            value={goalId || ''}
-                            onChange={(event) => {
-                                ;<LoadingSpinner />
-                                router.push(`notes?goalId=${event.target.value}`)
-                            }}
-                            className={
-                                'appearance-none text-subTitle-sm truncate py-3.5 px-8 bg-white rounded-xl border border-custom_slate-100 bg-[url("/goals/flag-goal.svg")] bg-no-repeat bg-[length:28px_28px] bg-[left_1rem_center] pl-14'
-                            }
-                        >
-                            <option value={goalId}>{goalData?.title}</option>
-                            {goal_list?.goals?.map((goal) => (
-                                <option key={goal.id} value={goal.id}>
-                                    {goal.title}
-                                </option>
-                            ))}
-                        </select>
+                        <div ref={goalsReference} className="relative w-full">
+                            <div
+                                onClick={() => setSelectGoals((previous) => !previous)}
+                                className={`w-full cursor-pointer appearance-none py-3.5 px-8 bg-white rounded-xl border border-custom_slate-100 bg-[url('/goals/flag-goal.svg')] bg-no-repeat bg-[length:28px_28px] bg-[left_1rem_center] pl-14 ${selectGoals && 'rounded-b-none'} flex items-center justify-between`}
+                            >
+                                <div className="text-subTitle-sm truncate">{selectedGoal?.title}</div>
+                                <div className="flex-shink-0">
+                                    <Image
+                                        src="/notes/down-fill.svg"
+                                        alt="down"
+                                        width={20}
+                                        height={20}
+                                        className={`transition-transform duration-200 ${selectGoals ? 'rotate-180' : ''}`}
+                                    />
+                                </div>
+                            </div>
+
+                            {selectGoals && (
+                                <div className="absolute z-10 w-full bg-white border border-custom_slate-100 rounded-t-none rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                                    {selectedGoal && ( //선택된 목표
+                                        <div
+                                            key={selectedGoal.id}
+                                            onClick={() => handleSelect(selectedGoal.id)}
+                                            className="px-4 py-2 cursor-pointer bg-custom_slate-200 truncate"
+                                        >
+                                            {selectedGoal.title}
+                                        </div>
+                                    )}
+                                    {otherGoals.map(
+                                        // 선택되지 않은 목표
+                                        (goal) => (
+                                            <div
+                                                key={goal.id}
+                                                onClick={() => handleSelect(goal.id)}
+                                                className="px-4 py-2 cursor-pointer hover:bg-custom_slate-50 truncate"
+                                            >
+                                                {goal.title}
+                                            </div>
+                                        ),
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     )}
 
                     {notes.length > 0 ? (

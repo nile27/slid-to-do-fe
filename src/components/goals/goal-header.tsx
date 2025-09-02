@@ -116,14 +116,15 @@ const GoalHeader = ({
                                     maxLength={35}
                                     ref={inputReference}
                                 />
-                                <ButtonStyle
-                                    size="medium"
-                                    onClick={() => handleGoalAction('edit')}
-                                    disabled={goal.title === goalTitle}
-                                >
+                                <ButtonStyle size="medium" type="submit" disabled={goal.title === goalTitle}>
                                     수정
                                 </ButtonStyle>
-                                <ButtonStyle size="medium" onClick={() => setGoalEdit(false)} color="outline">
+                                <ButtonStyle
+                                    size="medium"
+                                    type="button"
+                                    onClick={() => setGoalEdit(false)}
+                                    color="outline"
+                                >
                                     취소
                                 </ButtonStyle>
                             </form>
