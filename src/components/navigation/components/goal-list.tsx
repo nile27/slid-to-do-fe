@@ -18,14 +18,14 @@ const GoalList = () => {
             src: '/sidebar/document.svg',
         },
         {
-            name: '목표 리스트',
-            href: '/goals',
-            src: '/sidebar/filter.svg',
-        },
-        {
             name: '할일 리스트',
             href: '/todos',
-            src: '/sidebar/filter.svg',
+            src: '/sidebar/sidebar-todo.svg',
+        },
+        {
+            name: '목표 리스트',
+            href: '/goals',
+            src: '/sidebar/sidebar-goal.svg',
         },
     ]
 
@@ -38,10 +38,10 @@ const GoalList = () => {
                     <Link
                         href={item.href}
                         key={item.name}
-                        className="w-full  hover:bg-custom_blue-100 h-[40px] flex gap-2 pl-2 py-1 rounded-sm group  "
+                        className="w-full items-center  hover:bg-custom_blue-100 h-[40px] flex gap-2 pl-2 py-1 rounded-sm group  "
                     >
                         <li className="w-full flex  gap-2 border-l-4 pl-2 border-transparent group-hover:border-l-4 group-hover:border-custom_blue-400 ">
-                            <Image src={item.src} alt="image" width={24} height={24} />
+                            <Image src={item.src} alt="image" width={26} height={26} />
                             <span className="w-full h-auto p-2">{item.name}</span>
                         </li>
                     </Link>
