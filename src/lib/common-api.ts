@@ -43,6 +43,13 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
+        if (error.response?.status === 498) {
+            if (typeof globalThis !== 'undefined') {
+                globalThis.location.href = '/login'
+            }
+            return error
+        }
+
         if (error.response.status === 401 && !error.config._retry) {
             error.config._retry = true
             try {
@@ -55,7 +62,7 @@ axiosInstance.interceptors.response.use(
                 )
                 return axiosInstance(error.config)
             } catch (refreshError) {
-                if (typeof globalThis !== 'undefined') {
+                if (axios.isAxiosError(refreshError) && refreshError.response?.status === 498) {
                     globalThis.location.href = '/login'
                 }
                 return refreshError
