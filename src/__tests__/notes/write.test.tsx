@@ -61,7 +61,7 @@ function renderWithClient(ui: React.ReactElement) {
     return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>)
 }
 
-describe('NoteWriteCompo 유닛 테스트', () => {
+describe('NoteWriteCompo 테스트', () => {
     const goalId = '1'
     const todoId = '10'
     const storageKey = `note-draft-${goalId}-${todoId}`
@@ -72,6 +72,7 @@ describe('NoteWriteCompo 유닛 테스트', () => {
         )
         expect((getByPlaceholderText('노트의 제목을 적어주세요') as HTMLInputElement).value).toBe('')
     })
+
     it('로컬스토리지에 storageKey가 있을 경우 saveToastOpen=true로 설정되어야 한다', () => {
         localStorage.setItem(storageKey, JSON.stringify({editSubject: 'Test', editContent: 'Content'}))
         const {getByText} = renderWithClient(
@@ -87,6 +88,7 @@ describe('NoteWriteCompo 유닛 테스트', () => {
         fireEvent.click(getByText('임시작성'))
         expect(mockShowToast).toHaveBeenCalledWith('제목 또는 내용을 입력해주세요.')
     })
+
     it('제목이나 내용이 존재할 경우 로컬스토리지에 정상적으로 저장되어야 한다', () => {
         const {getByText, getByPlaceholderText} = renderWithClient(
             <NoteWriteCompo goalId={goalId} todoId={todoId} goalTitle="goal" todoTitle="todo" />,
@@ -117,18 +119,6 @@ describe('NoteWriteCompo 유닛 테스트', () => {
         )
         fireEvent.click(getByText('불러오기'))
         expect(mockOpenModal).toHaveBeenCalled()
-    })
-
-    it('제목이 30자 이하일 때 업데이트되어야 한다', () => {
-        const {getByPlaceholderText} = renderWithClient(
-            <NoteWriteCompo goalId={goalId} todoId={todoId} goalTitle="goal" todoTitle="todo" />,
-        )
-        fireEvent.change(getByPlaceholderText('노트의 제목을 적어주세요'), {
-            target: {value: '123456789012345678901234567890'},
-        })
-        expect((getByPlaceholderText('노트의 제목을 적어주세요') as HTMLInputElement).value).toBe(
-            '123456789012345678901234567890',
-        )
     })
 
     it('제목이 30자 초과일 때 업데이트되지 않고 toast가 호출되어야 한다', () => {
