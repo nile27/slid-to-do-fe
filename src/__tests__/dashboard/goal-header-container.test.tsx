@@ -24,7 +24,6 @@ describe('GoalTitleHeader', () => {
         render(<GoalTitleHeader goalId={1} title="테스트 목표" isDashboard />)
 
         expect(screen.getByText('Progress')).toBeInTheDocument()
-
         expect(screen.getByText(/\b50\s*%/)).toBeInTheDocument()
     })
 })
