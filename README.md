@@ -6,7 +6,7 @@
 - 📅 프로젝트 기간: 2025.07.03 ~ 2025.08.12 (총 6주)
 - 😄 팀원: 5명
 
-| 배포 사이트 |                                    💻 [배포 링크](https://slid-to-do-fe.vercel.app/)                                     |
+| 배포 사이트 |                                    💻 [배포 링크](slid-to-do-refactoring.vercel.app)                                     |
 | :-------: | :---- |
 |   공용 문서 노션    | 💻 [Notion 링크](https://mewing-halloumi-584.notion.site/Team-7-Project-Workspace-22261be3ce85802badebf9804fd30fdd?pvs=74) |
 
