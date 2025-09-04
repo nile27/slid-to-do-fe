@@ -44,7 +44,7 @@
   </tr>
   <tr>
     <td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3A42bbb89f-74f4-47be-b92e-224334a42656%3Aimage.png?table=block&id=24f61be3-ce85-800c-8622-c5c3891954a0&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2"  alt="signup page" width = 100% >
+      <img src="https://github.com/user-attachments/assets/43cfd3d6-a079-4db3-b6a7-0e59b2be080d"  alt="signup page" width = 100% >
     </td>
     <td>
       <img src="https://github.com/user-attachments/assets/7c1c22ef-a4bc-420e-ab3b-654bc9d0541b" alt="login page" width = 100%>
