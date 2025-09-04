@@ -52,9 +52,7 @@ describe('GoalTodoContainer', () => {
         render(<GoalTodoContainer isDashboard />)
 
         expect(screen.getByText('목표 별 할 일')).toBeInTheDocument()
-
         expect(screen.getByText('70')).toBeInTheDocument()
-
         expect(screen.getByTestId('goal-item')).toHaveTextContent('첫 번째 목표')
     })
 
