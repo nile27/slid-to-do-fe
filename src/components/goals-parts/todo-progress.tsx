@@ -4,9 +4,9 @@ import {useEffect} from 'react'
 
 import {motion, useAnimation} from 'framer-motion'
 
-import type {GoalProgress} from '@/types/goals'
+import type {TodoProgress} from '@/types/todos'
 
-const ProgressBar = ({progress, totalCount = 0, isDashboard}: GoalProgress) => {
+const ProgressBar = ({progress, totalCount = 0, isDashboard}: TodoProgress) => {
     const controls = useAnimation()
 
     useEffect(() => {

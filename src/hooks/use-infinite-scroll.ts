@@ -4,7 +4,7 @@ import {useInfiniteQuery} from '@tanstack/react-query'
 import {useInView} from 'react-intersection-observer'
 
 import type {InfiniteScrollOptions} from '@/types/infinite-scroll'
-import type {InfiniteData} from '@tanstack/react-query'
+import type {InfiniteData, QueryKey} from '@tanstack/react-query'
 
 export const useInfiniteScrollQuery = <T>({queryKey, fetchFn}: InfiniteScrollOptions<T>) => {
     const {data, fetchNextPage, hasNextPage, isFetchingNextPage, isError, error, isLoading, isFetched} =
@@ -12,7 +12,8 @@ export const useInfiniteScrollQuery = <T>({queryKey, fetchFn}: InfiniteScrollOpt
             {data: T[]; nextCursor: number | undefined},
             Error,
             {data: T[]; nextCursor: number | undefined},
-            (string | number | boolean)[],
+            QueryKey,
+            // (string | number | boolean)[],
             number | undefined
         >({
             queryKey,

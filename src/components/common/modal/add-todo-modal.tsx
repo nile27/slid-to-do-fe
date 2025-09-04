@@ -14,7 +14,7 @@ import {useCustomMutation} from '@/hooks/use-custom-mutation'
 import {useCustomQuery} from '@/hooks/use-custom-query'
 import useToast from '@/hooks/use-toast'
 import {post} from '@/lib/common-api'
-import {goalListApi} from '@/lib/goals/api'
+import {goals as goalList, todos} from '@/lib/query-keys'
 import {useModalStore} from '@/store/use-modal-store'
 
 import LoadingSpinner from '../loading-spinner'
@@ -58,18 +58,22 @@ const AddTodoModal = ({goalId}: AddTodoModalProperties) => {
         onDrop,
     })
 
-    const {data: goals, isLoading: isLoadingGoals} = useCustomQuery<GoalsListResponse>(['goals'], goalListApi, {
-        errorDisplayType: 'toast',
-        mapErrorMessage: (error) => {
-            const typedError = error as {message?: string; response?: {data?: {message?: string}}}
+    const {data: goals, isLoading: isLoadingGoals} = useCustomQuery<GoalsListResponse>(
+        goalList.list().queryKey,
+        goalList.list().queryFn,
+        {
+            errorDisplayType: 'toast',
+            mapErrorMessage: (error) => {
+                const typedError = error as {message?: string; response?: {data?: {message?: string}}}
 
-            if (axios.isAxiosError(error)) {
-                return error.response?.data.message || '서버 오류가 발생했습니다.'
-            }
+                if (axios.isAxiosError(error)) {
+                    return error.response?.data.message || '서버 오류가 발생했습니다.'
+                }
 
-            return typedError.message || '알 수 없는 오류가 발생했습니다.'
+                return typedError.message || '알 수 없는 오류가 발생했습니다.'
+            },
         },
-    })
+    )
 
     const uploadFileMutation = useCustomMutation<string>(
         async () => {
@@ -140,8 +144,7 @@ const AddTodoModal = ({goalId}: AddTodoModalProperties) => {
             },
             onSuccess: () => {
                 showToast('할 일이 생성되었습니다.')
-                queryClient.invalidateQueries({queryKey: ['todos']})
-                queryClient.invalidateQueries({queryKey: ['todo']})
+                queryClient.invalidateQueries({queryKey: todos.all()})
                 clearModal()
             },
         },
