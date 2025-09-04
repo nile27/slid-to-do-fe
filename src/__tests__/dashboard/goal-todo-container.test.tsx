@@ -3,8 +3,8 @@ import React from 'react'
 import {render, screen} from '@testing-library/react'
 
 import GoalTodoContainer from '@/components/goals-parts/goal-todo-container'
-import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
 import {useCustomQuery} from '@/hooks/use-custom-query'
+import {useInfiniteScrollQuery} from '@/hooks/use-infinite-scroll'
 
 // useCustomQuery mock
 jest.mock('@/hooks/use-custom-query', () => ({
@@ -26,7 +26,7 @@ jest.mock('@/lib/common-api', () => ({
 }))
 
 jest.mock('@/components/goals-parts/goal-title-header', () => {
-    return function MockGoalTitleHeader({title, goalId}: {title: string; goalId: number}) {
+    return function MockGoalTitleHeader({title}: {title: string; goalId: number}) {
         return <div data-testid="goal-item">{title}</div>
     }
 })
