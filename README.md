@@ -47,7 +47,7 @@
       <img src="https://mewing-halloumi-584.notion.site/image/attachment%3A42bbb89f-74f4-47be-b92e-224334a42656%3Aimage.png?table=block&id=24f61be3-ce85-800c-8622-c5c3891954a0&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2"  alt="signup page" width = 100% >
     </td>
     <td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3A5dea488f-8f8d-4c88-9cb3-dfab56a29b41%3Aimage.png?table=block&id=25661be3-ce85-81b8-a186-cd983d0d2bce&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=1620&userId=&cache=v2" alt="login page" width = 100%>
+      <img src="https://github.com/user-attachments/assets/7c1c22ef-a4bc-420e-ab3b-654bc9d0541b" alt="login page" width = 100%>
     </td>
    </tr> 
   <tr>
