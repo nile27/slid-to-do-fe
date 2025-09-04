@@ -76,21 +76,26 @@
   </tr>
   <tr>
     <td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3Aebffe53c-7f9b-48ba-bd60-2909e03541f4%3A%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2025-08-14_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_12.10.30.png?table=block&id=24f61be3-ce85-80be-90f4-de7d80df8b30&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2" alt="list page" width = 100%>
+      <img src="https://github.com/user-attachments/assets/194cab65-63ee-4e35-b704-a047ff466f1d" alt="list page" width = 100%>
     </td>
     <td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3Ac3ae7f7e-427b-4254-a3b8-e21ad533b145%3A%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2025-08-14_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_12.13.10.png?table=block&id=24f61be3-ce85-8011-91ad-d242b04a5ff7&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2" alt="review page" width = 100%>
+      <img src="https://github.com/user-attachments/assets/fd978c34-d7f2-4c57-9358-560732f1ca27" alt="review page" width = 100%>
     </td>
   </tr> 
   <tr>
    <th>
       노트 모아보기
+    </th>  <th>
+      노트 작성
     </th>
   </tr>
   <tr>  
 	<td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3Ac3ae7f7e-427b-4254-a3b8-e21ad533b145%3A%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2025-08-14_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_12.13.10.png?table=block&id=24f61be3-ce85-8011-91ad-d242b04a5ff7&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2" alt="mypage" width = 100%>
-    </td
+      <img src="https://github.com/user-attachments/assets/3e0c74ca-2b44-493c-94da-117ba9fc8c63" alt="mypage" width = 100%>
+	</td>
+	    <td>
+      <img src="https://github.com/user-attachments/assets/bc02cb33-e978-4d26-af8c-ecbe7cdc42c1" alt="review page" width = 100%>
+    </td>
   </tr>
       <br/>
 </table>	
