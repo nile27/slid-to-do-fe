@@ -44,10 +44,10 @@
   </tr>
   <tr>
     <td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3A42bbb89f-74f4-47be-b92e-224334a42656%3Aimage.png?table=block&id=24f61be3-ce85-800c-8622-c5c3891954a0&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2"  alt="signup page" width = 100% >
+      <img src="https://github.com/user-attachments/assets/e2f27a3b-dd1f-4d93-8fde-0a06c7f77c3e"  alt="signup page" width = 100% >
     </td>
     <td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3A5dea488f-8f8d-4c88-9cb3-dfab56a29b41%3Aimage.png?table=block&id=24f61be3-ce85-801e-b284-f174a8463caa&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2" alt="login page" width = 100%>
+      <img src="https://github.com/user-attachments/assets/59b0c486-d46f-4369-8239-465c302a6eb4" alt="login page" width = 100%>
     </td>
    </tr> 
   <tr>
@@ -60,10 +60,10 @@
   </tr>
   <tr>
     <td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3Ab102205d-a9fa-44ed-8150-339ccebf45e8%3Aimage.png?table=block&id=24f61be3-ce85-80e4-acfb-e1d6a37746c3&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2"  alt="main page" width = 100%>
+      <img src="https://github.com/user-attachments/assets/f5d6b998-ae2f-4f18-88d5-4303bbb7a2a1"  alt="main page" width = 100%>
     </td>
     <td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3A1af48abd-f6b1-421c-b3ef-79428bf9991e%3Aimage.png?table=block&id=24f61be3-ce85-809c-8fc0-faf220b27145&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2" alt="add page" width = 100%>
+      <img src="https://github.com/user-attachments/assets/1ad1a771-f499-48a7-8ef4-4e79c7af856c" alt="add page" width = 100%>
     </td>
    </tr>
    <tr>
