@@ -44,10 +44,10 @@
   </tr>
   <tr>
     <td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3A42bbb89f-74f4-47be-b92e-224334a42656%3Aimage.png?table=block&id=24f61be3-ce85-800c-8622-c5c3891954a0&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2"  alt="signup page" width = 100% >
+      <img src="https://github.com/user-attachments/assets/e2f27a3b-dd1f-4d93-8fde-0a06c7f77c3e"  alt="signup page" width = 100% >
     </td>
     <td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3A5dea488f-8f8d-4c88-9cb3-dfab56a29b41%3Aimage.png?table=block&id=24f61be3-ce85-801e-b284-f174a8463caa&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2" alt="login page" width = 100%>
+      <img src="https://github.com/user-attachments/assets/59b0c486-d46f-4369-8239-465c302a6eb4" alt="login page" width = 100%>
     </td>
    </tr> 
   <tr>
@@ -60,10 +60,10 @@
   </tr>
   <tr>
     <td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3Ab102205d-a9fa-44ed-8150-339ccebf45e8%3Aimage.png?table=block&id=24f61be3-ce85-80e4-acfb-e1d6a37746c3&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2"  alt="main page" width = 100%>
+      <img src="https://github.com/user-attachments/assets/f5d6b998-ae2f-4f18-88d5-4303bbb7a2a1"  alt="main page" width = 100%>
     </td>
     <td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3A1af48abd-f6b1-421c-b3ef-79428bf9991e%3Aimage.png?table=block&id=24f61be3-ce85-809c-8fc0-faf220b27145&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2" alt="add page" width = 100%>
+      <img src="https://github.com/user-attachments/assets/1ad1a771-f499-48a7-8ef4-4e79c7af856c" alt="add page" width = 100%>
     </td>
    </tr>
    <tr>
@@ -76,21 +76,26 @@
   </tr>
   <tr>
     <td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3Aebffe53c-7f9b-48ba-bd60-2909e03541f4%3A%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2025-08-14_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_12.10.30.png?table=block&id=24f61be3-ce85-80be-90f4-de7d80df8b30&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2" alt="list page" width = 100%>
+      <img src="https://github.com/user-attachments/assets/194cab65-63ee-4e35-b704-a047ff466f1d" alt="list page" width = 100%>
     </td>
     <td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3Ac3ae7f7e-427b-4254-a3b8-e21ad533b145%3A%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2025-08-14_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_12.13.10.png?table=block&id=24f61be3-ce85-8011-91ad-d242b04a5ff7&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2" alt="review page" width = 100%>
+      <img src="https://github.com/user-attachments/assets/fd978c34-d7f2-4c57-9358-560732f1ca27" alt="review page" width = 100%>
     </td>
   </tr> 
   <tr>
    <th>
       노트 모아보기
+    </th>  <th>
+      노트 작성
     </th>
   </tr>
   <tr>  
 	<td>
-      <img src="https://mewing-halloumi-584.notion.site/image/attachment%3Ac3ae7f7e-427b-4254-a3b8-e21ad533b145%3A%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2025-08-14_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_12.13.10.png?table=block&id=24f61be3-ce85-8011-91ad-d242b04a5ff7&spaceId=9e462b86-d673-41b8-b0db-505560448103&width=800&userId=&cache=v2" alt="mypage" width = 100%>
-    </td
+      <img src="https://github.com/user-attachments/assets/3e0c74ca-2b44-493c-94da-117ba9fc8c63" alt="mypage" width = 100%>
+	</td>
+	    <td>
+      <img src="https://github.com/user-attachments/assets/bc02cb33-e978-4d26-af8c-ecbe7cdc42c1" alt="review page" width = 100%>
+    </td>
   </tr>
       <br/>
 </table>	
