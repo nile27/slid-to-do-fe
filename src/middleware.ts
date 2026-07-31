@@ -7,8 +7,16 @@ export const middleware = (request: NextRequest) => {
     const accessToken = request.cookies.get('accessToken')?.value
     const refreshToken = request.cookies.get('refreshToken')?.value
 
+    console.log('[middleware]', {
+        pathname,
+        hasAccessToken: Boolean(accessToken),
+        hasRefreshToken: Boolean(refreshToken),
+        cookieNames: request.cookies.getAll().map((c) => c.name),
+    })
+
     //  루트 경로 처리 추가
     if (pathname === '/') {
+        console.log('[middleware] root path -> redirect to', accessToken && refreshToken ? '/dashboard' : '/login')
         return NextResponse.redirect(new URL(accessToken && refreshToken ? '/dashboard' : '/login', request.url))
     }
 
@@ -27,6 +35,7 @@ export const middleware = (request: NextRequest) => {
         !pathname.endsWith('.ico')
 
     if (isProtectedPath && (!accessToken || !refreshToken)) {
+        console.log('[middleware] protected path without token -> redirect to /login', {pathname})
         return NextResponse.redirect(new URL('/login', request.url))
     }
 
